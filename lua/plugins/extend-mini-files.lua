@@ -9,6 +9,14 @@ return {
       desc = "Open mini.files (directory of current file)",
     },
     {
+      "<leader>ec",
+      function()
+        local config_path = vim.fn.stdpath("config")
+        require("mini.files").open(config_path)
+      end,
+      desc = "Open mini.files (neovim config directory)",
+    },
+    {
       "<leader>E",
       function()
         require("mini.files").open(vim.uv.cwd(), true)
