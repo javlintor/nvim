@@ -160,4 +160,10 @@ for key, value in pairs(fib) do
 	print(key, value)
 end
 
+-- insert
+local MyTable = { 1, 2, 3 }
+table.insert(MyTable, 1, "a")
+for key, value in pairs(MyTable) do
+	print(key, value)
+end
 
