@@ -1,5 +1,7 @@
 print("advent of neovim")
 
+require("config.lazy")
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -11,9 +13,15 @@ vim.opt.relativenumber = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-
+-- default tab width
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
+
+-- copy from clipboard
+vim.opt.clipboard = "unnamedplus"
+
+-- no wrap text
+vim.opt.wrap = true
 
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -55,4 +63,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
-require("config.lazy")
