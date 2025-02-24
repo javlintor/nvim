@@ -1,9 +1,9 @@
 print("advent of neovim")
 
-require("config.lazy")
-
 vim.g.mapleader = " "      -- Set <Space> as the leader key
 vim.g.maplocalleader = " " -- Set local leader key (for buffer-specific mappings)
+
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -63,3 +63,5 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 		vim.highlight.on_yank()
 	end,
 })
+
+require("config.lazy")
