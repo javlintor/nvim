@@ -1,16 +1,15 @@
--- This is a comment 
+-- This is a comment
 --
 --
 local number = 5
 local string = "hello, world"
-local crazy = [[ This 
+local crazy = [[ This
 is a multi line and literal ]]
 
 local truth, lies = true, false
 
 
 local nothing = nil
-
 
 -- functions are first class, meaning you can make them as values
 local function hello(name)
@@ -28,7 +27,7 @@ local add_one = higher_order(1)
 print("add_one(2) -> ", add_one(2))
 
 -- tables as lists
-local list = {"first", 2, false, function () print("Fourth!") end }
+local list = { "first", 2, false, function() print("Fourth!") end }
 print(list[1])
 
 -- tables as maps
@@ -65,9 +64,9 @@ end
 
 -- if
 local function action(loves_coffe)
-	if loves_coffe then 
+	if loves_coffe then
 		print("Checkout ssh terminal.shop")
-	else 
+	else
 		print("Heey")
 	end
 end
@@ -88,7 +87,7 @@ action({})
 -- foo.lua
 local M = {}
 M.cool_function = function() end
-return M
+-- return M
 
 -- bar.lua
 -- assuming foo.lua is in runtime path
@@ -133,14 +132,14 @@ setup { other = true }
 local vector_mt = {}
 vector_mt.__add = function(left, right)
 	return setmetatable({
-		left[1] + right[1], 
+		left[1] + right[1],
 		left[2] + right[2],
 		left[3] + right[3],
 	}, vector_mt)
 end
 
-local v1 = setmetatable({3, 1, 5}, vector_mt)
-local v2 = setmetatable({-3, 2, 2}, vector_mt)
+local v1 = setmetatable({ 3, 1, 5 }, vector_mt)
+local v2 = setmetatable({ -3, 2, 2 }, vector_mt)
 local v3 = v1 + v2
 vim.print(v3[1], v3[2], v3[3])
 vim.print(v3 + v3)
@@ -166,4 +165,3 @@ table.insert(MyTable, 1, "a")
 for key, value in pairs(MyTable) do
 	print(key, value)
 end
-
