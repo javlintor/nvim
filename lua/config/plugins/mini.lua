@@ -1,9 +1,7 @@
 return {
 	{
-		'echasnovski/mini.nvim',
+		'echasnovski/mini.files',
 		config = function()
-			local statusline = require 'mini.statusline'
-			statusline.setup { use_icons = ture }
 			local minifiles = require "mini.files"
 			minifiles.setup({
 				windows = {
@@ -16,6 +14,28 @@ return {
 					show_hidden = true
 				}
 			})
+			vim.api.nvim_set_keymap(
+				'n',
+				'<leader>e',
+				':lua MiniFiles.open()<CR>',
+				{
+					desc = 'Open mini.files in current working directory',
+					noremap = true,
+					silent = true
+				}
+			)
+		end
+	},
+	{
+		'echasnovski/mini.statusline',
+		config = function()
+			local statusline = require 'mini.statusline'
+			statusline.setup { use_icons = true }
+		end
+	},
+	{
+		'echasnovski/mini.icons',
+		config = function()
 			local miniicons = require "mini.icons"
 			miniicons.setup({
 				style = 'glyph'
