@@ -16,6 +16,7 @@ return {
 					"python",
 					"javascript"
 				},
+				ignore_install = { "javascript" },
 				auto_install = false,
 				highlight = {
 					enable = true,
