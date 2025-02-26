@@ -17,6 +17,14 @@ return {
 		},
 		config = function()
 			require("lspconfig").lua_ls.setup {}
+			local venv_path = "./.venv/bin/python"
+			require("lspconfig").pyright.setup {
+				settings = {
+					python = {
+						pythonPath = venv_path
+					}
+				}
+			}
 		end,
 	}
 }
