@@ -1,4 +1,41 @@
--- just provide defaults to configure and interact with lsp servers
+local function lua_ls_setup()
+	require("lspconfig").lua_ls.setup {}
+end
+
+local function python_ls_setup()
+	local venv_path = "./.venv/bin/python"
+	require("lspconfig").pyright.setup {
+		settings = {
+			python = {
+				pythonPath = venv_path
+			}
+		}
+	}
+end
+
+local function general_ls_setup()
+	vim.keymap.set("n", "<space>cf", function() vim.lsp.buf.format() end)
+	vim.api.nvim_create_autocmd('LspAttach',
+		{
+			callback = function(args)
+				local client = vim.lsp.get_client_by_id(args.data.client_id)
+				if not client then return end
+				if client.supports_method('textDocument/formatting') then
+					vim.api.nvim_create_autocmd(
+						'BufWritePre',
+						{
+							buffer = args.buf,
+							callback = function()
+								vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+							end,
+						}
+					)
+				end
+			end,
+		}
+	)
+end
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -16,33 +53,9 @@ return {
 			},
 		},
 		config = function()
-			require("lspconfig").lua_ls.setup {}
-			local venv_path = "./.venv/bin/python"
-			require("lspconfig").pyright.setup {
-				settings = {
-					python = {
-						pythonPath = venv_path
-					}
-				}
-			}
-			vim.keymap.set("n", "<space>cf", function() vim.lsp.buf.format() end)
-			vim.api.nvim_create_autocmd('LspAttach', {
-				callback = function(args)
-					local client = vim.lsp.get_client_by_id(args.data.client_id)
-					if not client then return end
-					if client.supports_method('textDocument/formatting') then
-						vim.api.nvim_create_autocmd(
-							'BufWritePre',
-							{
-								buffer = args.buf,
-								callback = function()
-									vim.lsp.buf.format({bufnr = args.buf, id = client.id})
-								end,
-							}
-						)
-					end
-				end,
-			})
+			lua_ls_setup()
+			python_ls_setup()
+			general_ls_setup()
 		end,
 	}
 }
