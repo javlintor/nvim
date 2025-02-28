@@ -1,7 +1,7 @@
 print("advent of neovim")
 
-vim.g.mapleader = " "       -- Set <Space> as the leader key
-vim.g.maplocalleader = " "  -- Set local leader key (for buffer-specific mappings)
+vim.g.mapleader = " "      -- Set <Space> as the leader key
+vim.g.maplocalleader = " " -- Set local leader key (for buffer-specific mappings)
 
 
 -- Make line numbers default
