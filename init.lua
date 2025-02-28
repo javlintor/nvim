@@ -1,7 +1,7 @@
 print("advent of neovim")
 
-vim.g.mapleader = " "      -- Set <Space> as the leader key
-vim.g.maplocalleader = " " -- Set local leader key (for buffer-specific mappings)
+vim.g.mapleader = " "       -- Set <Space> as the leader key
+vim.g.maplocalleader = " "  -- Set local leader key (for buffer-specific mappings)
 
 
 -- Make line numbers default
@@ -22,7 +22,7 @@ vim.opt.tabstop = 4
 vim.opt.clipboard = "unnamedplus"
 
 -- no wrap text
-vim.opt.wrap = true
+vim.opt.wrap = false
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
