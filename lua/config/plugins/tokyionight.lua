@@ -1,3 +1,7 @@
 return {
-    { "folke/tokyonight.nvim", config = function() vim.cmd.colorscheme "tokyonight" end },
+	{
+		enable = false,
+		"folke/tokyonight.nvim",
+		config = function() vim.cmd.colorscheme "tokyonight" end
+	},
 }
