@@ -3,11 +3,14 @@ local function lua_ls_setup()
 end
 
 local function python_ls_setup()
-	local venv_path = "./.venv/bin/python"
+	local pythonPath = "./.venv/bin/python"
+	if vim.fn.executable(pythonPath) == 0 then
+		pythonPath = vim.fn.exepath("python3")
+	end
 	require("lspconfig").pyright.setup {
 		settings = {
 			python = {
-				pythonPath = venv_path
+				pythonPath = pythonPath
 			}
 		}
 	}
