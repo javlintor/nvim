@@ -13,7 +13,8 @@ return {
 					"query",
 					"markdown",
 					"markdown_inline",
-					"javascript"
+					"javascript",
+					"python"
 				},
 				sync_install = false,
 				auto_install = false,
