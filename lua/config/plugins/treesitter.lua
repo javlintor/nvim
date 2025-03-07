@@ -13,7 +13,10 @@ return {
 					"query",
 					"markdown",
 					"markdown_inline",
-					"javascript"
+					"javascript",
+					"python",
+					"sql",
+					"terraform"
 				},
 				sync_install = false,
 				auto_install = false,

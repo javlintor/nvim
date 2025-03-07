@@ -9,8 +9,14 @@ return {
 		require("telescope").setup {
 			pickers = {
 				find_files = {
-					theme = "ivy"
+					theme = "ivy",
+					hidden = true,
 				},
+				live_grep = {
+					additional_args = function()
+						return { "--hidden" }
+					end
+				}
 			},
 			extensions = {
 				fzf = {}
@@ -24,16 +30,6 @@ return {
 			'<leader>en',
 			function()
 				builtin.find_files { cwd = vim.fn.stdpath("config") }
-			end,
-			{ desc = 'Edit Neovim' }
-		)
-		vim.keymap.set(
-			'n',
-			'<leader>en',
-			function()
-				builtin.find_files({
-					cwd = vim.fn.stdpath("config")
-				})
 			end,
 			{ desc = 'Edit Neovim' }
 		)

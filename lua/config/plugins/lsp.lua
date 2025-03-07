@@ -16,8 +16,11 @@ local function python_ls_setup()
 	}
 end
 
-local function general_ls_setup()
-	vim.keymap.set("n", "<space>cf", function() vim.lsp.buf.format() end)
+local function sqlls_ls_setup()
+	require 'lspconfig'.sqlls.setup {}
+end
+
+local function create_lsp_attach_autocmd()
 	vim.api.nvim_create_autocmd('LspAttach',
 		{
 			callback = function(args)
@@ -39,6 +42,15 @@ local function general_ls_setup()
 	)
 end
 
+local function terraform_ls_setup()
+	require("lspconfig").terraform_lsp.setup {}
+end
+
+local function set_keymaps()
+	vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename variable" })
+end
+
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -58,7 +70,10 @@ return {
 		config = function()
 			lua_ls_setup()
 			python_ls_setup()
-			general_ls_setup()
+			sqlls_ls_setup()
+			create_lsp_attach_autocmd()
+			terraform_ls_setup()
+			set_keymaps()
 		end,
 	}
 }
