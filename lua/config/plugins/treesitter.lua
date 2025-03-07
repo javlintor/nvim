@@ -14,7 +14,9 @@ return {
 					"markdown",
 					"markdown_inline",
 					"javascript",
-					"python"
+					"python",
+					"sql",
+					"terraform"
 				},
 				sync_install = false,
 				auto_install = false,
