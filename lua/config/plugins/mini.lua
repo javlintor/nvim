@@ -14,12 +14,24 @@ return {
 					show_hidden = true
 				}
 			})
+			-- open mini.files in current working directory
 			vim.api.nvim_set_keymap(
 				'n',
-				'<leader>e',
+				'<leader>ee',
 				':lua MiniFiles.open()<CR>',
 				{
 					desc = 'Open mini.files in current working directory',
+					noremap = true,
+					silent = true
+				}
+			)
+			-- open mini.files in the directory where the buffer is located
+			vim.api.nvim_set_keymap(
+				'n',
+				'<leader>ef',
+				':lua MiniFiles.open(vim.fn.expand("%p:h"))<CR>',
+				{
+					desc = 'Open mini.files in current file directory',
 					noremap = true,
 					silent = true
 				}
