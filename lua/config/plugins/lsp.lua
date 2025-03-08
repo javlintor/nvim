@@ -1,5 +1,9 @@
+local capabilities = require("blink.cmp").get_lsp_capabilities()
+
 local function lua_ls_setup()
-	require("lspconfig").lua_ls.setup {}
+	require("lspconfig").lua_ls.setup {
+		capabilities = capabilities
+	}
 end
 
 local function python_ls_setup()
@@ -12,12 +16,15 @@ local function python_ls_setup()
 			python = {
 				pythonPath = pythonPath
 			}
-		}
+		},
+		capabilities = capabilities
 	}
 end
 
 local function sqlls_ls_setup()
-	require 'lspconfig'.sqlls.setup {}
+	require 'lspconfig'.sqlls.setup {
+		capabilities = capabilities
+	}
 end
 
 local function create_lsp_attach_autocmd()
@@ -48,6 +55,7 @@ end
 
 local function set_keymaps()
 	vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename variable" })
+	vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 end
 
 
@@ -55,6 +63,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
+			'saghen/blink.cmp',
 			{
 				"folke/lazydev.nvim",
 				ft = "lua", -- only load on lua files
