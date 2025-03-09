@@ -1,5 +1,3 @@
-print("advent of neovim")
-
 vim.g.mapleader = " "      -- Set <Space> as the leader key
 vim.g.maplocalleader = " " -- Set local leader key (for buffer-specific mappings)
 
@@ -74,6 +72,23 @@ vim.keymap.set("n", "<space>x", ":.lua<CR>")
 -- source selected section
 vim.keymap.set("v", "<space>x", ":lua<CR>")
 
+-- scroll up and down followed by centerize
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+local function next_quickfix()
+	vim.cmd("copen")
+	vim.cmd("cnext")
+end
+
+local function prev_quickfix()
+	vim.cmd("copen")
+	vim.cmd("cprev")
+end
+
+vim.keymap.set("n", "[c", prev_quickfix)
+vim.keymap.set("n", "]c", next_quickfix)
+
 -- highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {
 	desc = 'Highlight when yanking text',
@@ -82,5 +97,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 		vim.highlight.on_yank()
 	end,
 })
+
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
+
+-- TODO: open and closing parenthesis
+-- TODO: switch between buffers? tab line?
+-- TODO: messages and commands
+-- TODO: python debugger
+-- TODO: database client
+-- TODO: sql lsp
 
 require("config.lazy")
