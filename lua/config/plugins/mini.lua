@@ -36,6 +36,16 @@ return {
 					silent = true
 				}
 			)
+			vim.api.nvim_set_keymap(
+				'n',
+				'<leader>ec',
+				':lua MiniFiles.open(vim.fn.stdpath("config"))<CR>',
+				{
+					desc = 'Open mini.files in nvim configuration directory',
+					noremap = true,
+					silent = true
+				}
+			)
 		end
 	},
 	{
