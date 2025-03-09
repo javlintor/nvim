@@ -1,7 +1,6 @@
 vim.g.mapleader = " "      -- Set <Space> as the leader key
 vim.g.maplocalleader = " " -- Set local leader key (for buffer-specific mappings)
 
-
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -101,11 +100,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 
--- TODO: open and closing parenthesis
--- TODO: switch between buffers? tab line?
--- TODO: messages and commands
+
 -- TODO: python debugger
 -- TODO: database client
 -- TODO: sql lsp
+-- TODO: custom startup theme
 
 require("config.lazy")
