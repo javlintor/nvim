@@ -56,6 +56,7 @@ end
 local function set_keymaps()
 	vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename variable" })
 	vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+	vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { desc = "Go to references" })
 end
 
 
