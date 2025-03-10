@@ -103,6 +103,7 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 
 -- TODO: python debugger
 -- TODO: database client
+-- TODO: MASON
 -- TODO: sql lsp
 -- TODO: custom startup theme
 
