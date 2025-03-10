@@ -7,7 +7,7 @@ local state = {
 	}
 }
 
-function create_floating_window(opts)
+local function create_floating_window(opts)
 	opts = opts or {}
 	local ui = vim.api.nvim_list_uis()[1] -- Get UI dimensions
 
