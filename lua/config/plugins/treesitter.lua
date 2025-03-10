@@ -16,7 +16,8 @@ return {
 					"javascript",
 					"python",
 					"sql",
-					"terraform"
+					"terraform",
+					"yaml"
 				},
 				sync_install = false,
 				auto_install = false,
