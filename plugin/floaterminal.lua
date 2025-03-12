@@ -52,4 +52,4 @@ local function toggle_terminal()
 end
 
 vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
-vim.keymap.set({ "n", "t" }, "<space>tt", toggle_terminal, { desc = "Toggle terminal" })
+vim.keymap.set({ "n" }, "<space>tt", toggle_terminal, { desc = "Toggle terminal" })
