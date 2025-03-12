@@ -25,6 +25,10 @@ vim.opt.wrap = false
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor
+-- scroll up and down followed by centerize
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "G", "Gzz")
 vim.opt.scrolloff = 10
 
 -- Sets how neovim will display certain whitespace characters in the editor.
@@ -33,8 +37,6 @@ vim.opt.scrolloff = 10
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- scroll
-vim.o.scroll = 10
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -71,9 +73,6 @@ vim.keymap.set("n", "<space>x", ":.lua<CR>")
 -- source selected section
 vim.keymap.set("v", "<space>x", ":lua<CR>")
 
--- scroll up and down followed by centerize
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 local function next_quickfix()
 	vim.cmd("copen")
@@ -108,3 +107,5 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 -- TODO: custom startup theme
 
 require("config.lazy")
+-- scroll
+vim.o.scroll = 10
