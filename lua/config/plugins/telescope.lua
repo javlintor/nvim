@@ -7,6 +7,9 @@ return {
 	},
 	config = function()
 		require("telescope").setup {
+			defaults = {
+				path_display = { "tail" }
+			},
 			pickers = {
 				find_files = {
 					theme = "ivy",
