@@ -63,6 +63,16 @@ end
 
 return {
 	{
+		"williamboman/mason.nvim",
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim"
+		},
+		config = function()
+			require("mason").setup {}
+			require("mason-lspconfig").setup()
+		end
+	},
+	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			'saghen/blink.cmp',
@@ -77,6 +87,7 @@ return {
 					},
 				},
 			},
+			'nvimtools/none-ls.nvim'
 		},
 		config = function()
 			lua_ls_setup()
