@@ -8,7 +8,8 @@ return {
 	config = function()
 		require("telescope").setup {
 			defaults = {
-				path_display = { "tail" }
+				path_display = { "tail" },
+				file_ignore_patterns = { ".git" }
 			},
 			pickers = {
 				find_files = {
