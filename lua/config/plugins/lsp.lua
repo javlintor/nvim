@@ -61,6 +61,45 @@ local function set_keymaps()
 end
 
 
+-- return {
+-- 	{
+-- 		"williamboman/mason.nvim",
+-- 		dependencies = {
+-- 			"williamboman/mason-lspconfig.nvim"
+-- 		},
+-- 		config = function()
+-- 			require("mason").setup {}
+-- 			require("mason-lspconfig").setup()
+-- 		end
+-- 	},
+-- 	{
+-- 		"neovim/nvim-lspconfig",
+-- 		dependencies = {
+-- 			'saghen/blink.cmp',
+-- 			{
+-- 				"folke/lazydev.nvim",
+-- 				ft = "lua", -- only load on lua files
+-- 				opts = {
+-- 					library = {
+-- 						-- See the configuration section for more details
+-- 						-- Load luvit types when the `vim.uv` word is found
+-- 						{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+-- 					},
+-- 				},
+-- 			},
+-- 			'nvimtools/none-ls.nvim'
+-- 		},
+-- 		config = function()
+-- 			lua_ls_setup()
+-- 			python_ls_setup()
+-- 			sqlls_ls_setup()
+-- 			create_lsp_attach_autocmd()
+-- 			terraform_ls_setup()
+-- 			set_keymaps()
+-- 		end,
+-- 	}
+-- }
+--
 return {
 	{
 		"williamboman/mason.nvim",
@@ -87,15 +126,54 @@ return {
 					},
 				},
 			},
-			'nvimtools/none-ls.nvim'
 		},
 		config = function()
 			lua_ls_setup()
-			python_ls_setup()
+			-- python_ls_setup()
 			sqlls_ls_setup()
 			create_lsp_attach_autocmd()
 			terraform_ls_setup()
 			set_keymaps()
 		end,
+	},
+	{
+		"nvimtools/none-ls.nvim",
+		dependencies = {
+			"nvimtools/none-ls-extras.nvim",
+			"jayp0521/mason-null-ls.nvim"
+		},
+		config = function()
+			require("mason-null-ls").setup {
+				ensure_installed = {
+					'ruff',
+					'prettier',
+					'shfmt',
+				},
+				automatic_installation = true,
+			}
+			local null_ls = require "null-ls"
+			local sources = {
+				require("none-ls.formatting.ruff").with { extra_args = { "--extend_selected", "I" } },
+				require("none-ls.formatting.ruff_format"),
+				null_ls.builtins.formatting.prettier.with { filetypes = { 'json', "yaml", "markdown" } },
+				null_ls.builtins.formatting.shfmt.with { args = { "-i", "4" } }
+			}
+			local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+			null_ls.setup {
+				sources = sources,
+				on_attach = function(client, bufnr)
+					if client.supports_method "textDocument/formatting" then
+						vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = augroup,
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.buf.format { async = false }
+							end,
+						})
+					end
+				end
+			}
+		end
 	}
 }
