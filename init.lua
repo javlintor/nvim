@@ -155,6 +155,7 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 20
+vim.opt.scroll = 10
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -184,7 +185,6 @@ vim.api.nvim_create_autocmd('TermOpen', {
   callback = function()
     vim.wo.number = false
     vim.wo.relativenumber = false
-    vim.cmd('resize ' .. math.floor(vim.o.lines * 0.35))
   end,
 })
 
@@ -216,6 +216,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+--
+-- source current file
+vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>') -- <CR> simulates pressing enter
+-- source current line
+vim.keymap.set('n', '<space>x', ':.lua<CR>')
+-- source selected section
+vim.keymap.set('v', '<space>x', ':lua<CR>')
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
