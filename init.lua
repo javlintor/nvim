@@ -153,10 +153,6 @@ vim.opt.inccommand = 'split'
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 20
-vim.opt.scroll = 10
-
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
@@ -412,7 +408,7 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
-          file_ignore_patterns = { '.git' },
+          file_ignore_patterns = { '.git/**' },
         },
         pickers = {
           find_files = { hidden = true },
@@ -683,8 +679,19 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
-        ruff = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = 'workspace',
+                pythonPath = '.venv/bin/python',
+              },
+            },
+          },
+        },
+        debugpy = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -775,14 +782,14 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 2000,
           lsp_format = lsp_format_opt,
         }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'ruff_format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -908,13 +915,6 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'navarasu/onedark.nvim',
-    config = function()
-      require('onedark').load()
-    end,
-  },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -1016,6 +1016,45 @@ require('lazy').setup({
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
   },
+  {
+    'navarasu/onedark.nvim',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('onedark').load()
+    end,
+  },
+
+  {
+    'mfussenegger/nvim-dap-python',
+    config = function()
+      require('dap-python').setup 'uv'
+    end,
+  },
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+  },
+  {
+    'stevanmilic/nvim-lspimport',
+    config = function()
+      vim.keymap.set('n', '<leader>a', require('lspimport').import, { noremap = true })
+    end,
+  },
 
   -----
 
@@ -1069,3 +1108,14 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+vim.opt.scroll = 10
+vim.opt.scrolloff = 20
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
+vim.keymap.set('n', 'G', 'Gzz', { noremap = true, silent = true })
+vim.keymap.set('n', 'L', '<cmd>BufferNext<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', 'H', '<cmd>BufferPrevious<CR>', { noremap = true, silent = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  command = 'setlocal colorcolumn=100',
+})
