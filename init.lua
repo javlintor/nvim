@@ -465,6 +465,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      vim.keymap.set('n', '<leader>ei', function()
+        vim.cmd('edit ' .. vim.fn.stdpath 'config' .. '/init.lua')
+      end, { desc = '[E]edit [I]nit.lua' })
     end,
   },
 
@@ -683,16 +687,10 @@ require('lazy').setup({
         pyright = {
           settings = {
             python = {
-              analysis = {
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = 'workspace',
-                pythonPath = '.venv/bin/python',
-              },
+              pythonPath = '.venv/bin/python',
             },
           },
         },
-        debugpy = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -783,7 +781,7 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 5000,
+          timeout_ms = 50000,
           lsp_format = lsp_format_opt,
         }
       end,
@@ -791,7 +789,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff_format', 'ruff_organize_imports' },
-        sql = { 'sqruff' },
+        sql = { 'sqlfluff' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -982,6 +980,7 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  --- NOTE: My plugins here - start
   -- blame
   {
     {
@@ -1030,10 +1029,8 @@ require('lazy').setup({
 
   {
     'mfussenegger/nvim-dap-python',
-    config = function()
-      require('dap-python').setup 'uv'
-    end,
   },
+
   {
     'romgrk/barbar.nvim',
     dependencies = {
@@ -1065,6 +1062,11 @@ require('lazy').setup({
     opts = {},
   },
 
+  {
+    'rcarriga/nvim-notify',
+  },
+
+  --- NOTE: My plugins here - end
   -----
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1128,4 +1130,21 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'python',
   command = 'setlocal colorcolumn=100',
 })
-vim.api.nvim_set_keymap('n', '<leader>cp', [[:let @+ = expand('%:p')<CR>]], { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>cp', function()
+  local filepath = vim.fn.expand '%:p' -- full file path
+  vim.fn.setreg('+', filepath) -- copy to system clipboard
+  vim.notify('File path copied: ' .. filepath)
+end, { desc = 'Copy file path to clipboard' })
+vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
+  callback = function()
+    local venv_path = vim.fn.getcwd() .. '/.venv'
+    local python_bin = venv_path .. '/bin/python'
+    if vim.fn.filereadable(python_bin) == 1 then
+      vim.env.VIRTUAL_ENV = venv_path
+      vim.env.PATH = venv_path .. '/bin:' .. vim.env.PATH
+      vim.g.python3_host_prog = python_bin
+    end
+  end,
+})
+
+vim.keymap.set('n', '<leader>SS', '<cmd>source Session.vim<CR>', { noremap = true, silent = true, desc = '[S]ource [S]ession' })
