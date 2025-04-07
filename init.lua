@@ -691,6 +691,7 @@ require('lazy').setup({
             },
           },
         },
+        debugpy = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -1028,10 +1029,6 @@ require('lazy').setup({
   },
 
   {
-    'mfussenegger/nvim-dap-python',
-  },
-
-  {
     'romgrk/barbar.nvim',
     dependencies = {
       'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
@@ -1064,6 +1061,50 @@ require('lazy').setup({
 
   {
     'rcarriga/nvim-notify',
+  },
+
+  {
+    'mfussenegger/nvim-dap',
+    keys = {
+      {
+        '<leader>db',
+        "<cmd>print('testing')<CR>",
+        desc = 'Debug Breakpoint',
+      },
+    },
+  },
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriaga/nvim-dap-ui',
+    },
+    config = function()
+      local python_bin = '.venv/bin/python'
+      require('dap-python').setup(python_bin)
+    end,
+  },
+
+  {
+    'rcarriaga/nvim-dap-ui',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+    },
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.after.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.after.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
   },
 
   --- NOTE: My plugins here - end
