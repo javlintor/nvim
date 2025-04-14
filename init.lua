@@ -692,6 +692,7 @@ require('lazy').setup({
           },
         },
         debugpy = {},
+        markdownlint = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -791,6 +792,7 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff_format', 'ruff_organize_imports' },
         sql = { 'sqlfluff' },
+        markdown = { 'markdownlint' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -962,7 +964,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc', 'python' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1028,6 +1030,20 @@ require('lazy').setup({
     end,
   },
 
+  -- {
+  --   'stevanmilic/nvim-lspimport',
+  --   config = function()
+  --     vim.keymap.set('n', '<leader>a', require('lspimport').import, { noremap = true })
+  --   end,
+  -- },
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
+
   {
     'romgrk/barbar.nvim',
     dependencies = {
@@ -1046,64 +1062,12 @@ require('lazy').setup({
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
   {
-    'stevanmilic/nvim-lspimport',
-    config = function()
-      vim.keymap.set('n', '<leader>a', require('lspimport').import, { noremap = true })
-    end,
+    'mfussenegger/nvim-dap',
   },
-  {
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
-    ---@module "ibl"
-    ---@type ibl.config
-    opts = {},
-  },
-
-  {
-    'rcarriga/nvim-notify',
-  },
-
   {
     'mfussenegger/nvim-dap',
-    keys = {
-      {
-        '<leader>db',
-        "<cmd>print('testing')<CR>",
-        desc = 'Debug Breakpoint',
-      },
-    },
-  },
-  {
-    'mfussenegger/nvim-dap-python',
-    ft = 'python',
-    dependencies = {
-      'mfussenegger/nvim-dap',
-      'rcarriaga/nvim-dap-ui',
-    },
     config = function()
-      local python_bin = '.venv/bin/python'
-      require('dap-python').setup(python_bin)
-    end,
-  },
-
-  {
-    'rcarriaga/nvim-dap-ui',
-    dependencies = {
-      'mfussenegger/nvim-dap',
-    },
-    config = function()
-      local dap = require 'dap'
-      local dapui = require 'dapui'
-      dapui.setup()
-      dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open()
-      end
-      dap.listeners.after.event_terminated['dapui_config'] = function()
-        dapui.close()
-      end
-      dap.listeners.after.event_exited['dapui_config'] = function()
-        dapui.close()
-      end
+      print 'loading nvim-dap-python...'
     end,
   },
 
@@ -1160,8 +1124,8 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-vim.opt.scroll = 10
-vim.opt.scrolloff = 20
+vim.opt.scroll = 5
+vim.opt.scrolloff = 10
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 vim.keymap.set('n', 'G', 'Gzz', { noremap = true, silent = true })
