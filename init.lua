@@ -1065,13 +1065,6 @@ require('lazy').setup({
 
   {
     'mfussenegger/nvim-dap',
-    keys = {
-      {
-        '<leader>db',
-        "<cmd>print('testing')<CR>",
-        desc = 'Debug Breakpoint',
-      },
-    },
   },
   {
     'mfussenegger/nvim-dap-python',
@@ -1080,12 +1073,74 @@ require('lazy').setup({
       'mfussenegger/nvim-dap',
       'rcarriaga/nvim-dap-ui',
     },
-    config = function()
-      local python_bin = '.venv/bin/python'
-      require('dap-python').setup(python_bin)
+    config = function(_, opts)
+      local py = require 'dap-python'
+      local debugpy_path = require('mason-registry').get_package('debugpy'):get_install_path()
+      py.setup(debugpy_path .. '/venv/bin/python', opts)
+      py.test_runner = 'pytest'
+      local dap = require 'dap'
+      local configs = dap.configurations.python or {}
+      dap.configurations.python = configs
+      table.insert(configs, {
+        type = 'python',
+        request = 'launch',
+        name = 'Launch file',
+        program = '${file}',
+        console = opts.console,
+        pythonPath = opts.pythonPath,
+      })
+      table.insert(configs, {
+        type = 'python',
+        request = 'launch',
+        name = 'Launch file with arguments',
+        program = '${file}',
+        args = function()
+          local args_string = vim.fn.input 'Arguments: '
+          return vim.split(args_string, ' +')
+        end,
+        console = opts.console,
+        pythonPath = opts.pythonPath,
+      })
+      table.insert(configs, {
+        type = 'python',
+        request = 'launch',
+        name = 'Launch main.py',
+        program = function()
+          return './main.py'
+        end,
+        pythonPath = opts.pythonPath,
+      })
+      table.insert(configs, {
+        type = 'python',
+        request = 'launch',
+        name = 'Streamlit src/apps/main.py',
+        module = 'streamlit',
+        args = function()
+          return {
+            'run',
+            vim.fn.input('Streamlit app script > ', 'src/apps/main.py', 'file'),
+          }
+        end,
+        pythonPath = 'python',
+        console = 'integratedTerminal',
+      })
+      table.insert(configs, {
+        type = 'python',
+        request = 'launch',
+        name = 'FastAPI module',
+        module = 'uvicorn',
+        args = function()
+          return {
+            vim.fn.input('FastAPI app module > ', 'main:app', 'file'),
+            -- '--reload', -- doesn't work
+            '--use-colors',
+          }
+        end,
+        pythonPath = 'python',
+        console = 'integratedTerminal',
+      })
     end,
   },
-
   {
     'rcarriaga/nvim-dap-ui',
     dependencies = {
