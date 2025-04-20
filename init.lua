@@ -183,6 +183,16 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.wo.relativenumber = false
   end,
 })
+-- Enable line numbers when entering normal buffers
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*',
+  callback = function()
+    if vim.bo.buftype == '' then
+      vim.wo.number = true
+      vim.wo.relativenumber = true -- Optional
+    end
+  end,
+})
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -1070,7 +1080,7 @@ require('lazy').setup({
     ft = 'python',
     dependencies = {
       'mfussenegger/nvim-dap',
-      'rcarriaga/nvim-dap-ui',
+      'rcarriga/nvim-dap-ui',
       'nvim-neotest/nvim-nio',
     },
     config = function(_, opts)
@@ -1142,7 +1152,7 @@ require('lazy').setup({
     end,
   },
   {
-    'rcarriaga/nvim-dap-ui',
+    'rcarriga/nvim-dap-ui',
     dependencies = {
       'mfussenegger/nvim-dap',
     },
