@@ -1298,6 +1298,35 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+      vim.g.dbs = {
+        local_sqlite = 'sqlite:./test.sqlite',
+      }
+    end,
+  },
+  {
+    'ellisonleao/dotenv.nvim',
+    config = function()
+      require('dotenv').setup {
+        enable_on_load = true, -- will load your .env file upon loading a buffer
+        verbose = false, -- show error notification if .env file is not found and if .env is loaded
+      }
+    end,
+  },
 
   --- NOTE: My plugins here - end
   -----
