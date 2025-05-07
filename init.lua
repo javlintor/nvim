@@ -454,7 +454,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader><leader>', function()
+        builtin.buffers { sort_lastused = true }
+      end, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -1057,23 +1059,6 @@ require('lazy').setup({
   },
 
   {
-    'romgrk/barbar.nvim',
-    dependencies = {
-      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-    },
-    init = function()
-      vim.g.barbar_auto_setup = false
-    end,
-    opts = {
-      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-      -- animation = true,
-      -- insert_at_start = true,
-      -- …etc.
-    },
-    version = '^1.0.0', -- optional: only update when a new 1.x version is released
-  },
-  {
     'mfussenegger/nvim-dap',
     dependencies = {
       -- Creates a beautiful debugger UI
@@ -1204,32 +1189,32 @@ require('lazy').setup({
       dap.configurations.python = configs
       table.insert(configs, {
         type = 'python',
-        request = 'launch',
-        name = 'Launch with uv',
         program = '${file}',
-        python = 'uv run --env-file .env',
+        request = 'launch',
+        name = 'Launch ops washing streamlit',
+        python = 'uv run --env-file .env/ops_washing.env --group ops_washing -m streamlit run src/apps/main.py -- --app ops_washing',
         console = opts.console,
       })
-      table.insert(configs, {
-        type = 'python',
-        request = 'launch',
-        name = 'Launch file',
-        program = '${file}',
-        console = opts.console,
-        pythonPath = opts.pythonPath,
-      })
-      table.insert(configs, {
-        type = 'python',
-        request = 'launch',
-        name = 'Launch file with arguments',
-        program = '${file}',
-        args = function()
-          local args_string = vim.fn.input 'Arguments: '
-          return vim.split(args_string, ' +')
-        end,
-        console = opts.console,
-        pythonPath = opts.pythonPath,
-      })
+      -- table.insert(configs, {
+      --   type = 'python',
+      --   request = 'launch',
+      --   name = 'Launch file',
+      --   program = '${file}',
+      --   console = opts.console,
+      --   pythonPath = opts.pythonPath,
+      -- })
+      -- table.insert(configs, {
+      --   type = 'python',
+      --   request = 'launch',
+      --   name = 'Launch file with arguments',
+      --   program = '${file}',
+      --   args = function()
+      --     local args_string = vim.fn.input 'Arguments: '
+      --     return vim.split(args_string, ' +')
+      --   end,
+      --   console = opts.console,
+      --   pythonPath = opts.pythonPath,
+      -- })
       -- table.insert(configs, {
       --   type = 'python',
       --   request = 'launch',
@@ -1239,35 +1224,35 @@ require('lazy').setup({
       --   end,
       --   pythonPath = opts.pythonPath,
       -- })
-      table.insert(configs, {
-        type = 'python',
-        request = 'launch',
-        name = 'Streamlit src/apps/main.py',
-        module = 'streamlit',
-        args = function()
-          return {
-            'run',
-            vim.fn.input('Streamlit app script > ', 'src/apps/main.py', 'file'),
-          }
-        end,
-        pythonPath = 'python',
-        console = 'integratedTerminal',
-      })
-      table.insert(configs, {
-        type = 'python',
-        request = 'launch',
-        name = 'FastAPI module',
-        module = 'uvicorn',
-        args = function()
-          return {
-            vim.fn.input('FastAPI app module > ', 'main:app', 'file'),
-            -- '--reload', -- doesn't work
-            '--use-colors',
-          }
-        end,
-        pythonPath = 'python',
-        console = 'integratedTerminal',
-      })
+      -- table.insert(configs, {
+      --   type = 'python',
+      --   request = 'launch',
+      --   name = 'Streamlit src/apps/main.py',
+      --   module = 'streamlit',
+      --   args = function()
+      --     return {
+      --       'run',
+      --       vim.fn.input('Streamlit app script > ', 'src/apps/main.py', 'file'),
+      --     }
+      --   end,
+      --   pythonPath = 'python',
+      --   console = 'integratedTerminal',
+      -- })
+      -- table.insert(configs, {
+      --   type = 'python',
+      --   request = 'launch',
+      --   name = 'FastAPI module',
+      --   module = 'uvicorn',
+      --   args = function()
+      --     return {
+      --       vim.fn.input('FastAPI app module > ', 'main:app', 'file'),
+      --       -- '--reload', -- doesn't work
+      --       '--use-colors',
+      --     }
+      --   end,
+      --   pythonPath = 'python',
+      --   console = 'integratedTerminal',
+      -- })
     end,
   },
   {
@@ -1325,6 +1310,36 @@ require('lazy').setup({
         enable_on_load = true, -- will load your .env file upon loading a buffer
         verbose = false, -- show error notification if .env file is not found and if .env is loaded
       }
+    end,
+  },
+  {
+    'PedramNavid/dbtpal',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+    ft = {
+      'sql',
+      'md',
+      'yaml',
+    },
+    keys = {
+      { '<leader>sm', "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>" },
+    },
+    config = function()
+      require('dbtpal').setup {
+        path_to_dbt = 'dbt',
+        path_to_dbt_project = '.',
+        path_to_dbt_profiles_dir = '.',
+        include_profiles_dir = true,
+        include_project_dir = true,
+        include_log_level = true,
+        extended_path_search = true,
+        protect_compiled_files = true,
+        pre_cmd_args = {},
+        post_cmd_args = { '--profile', 'ifco_digital_gwc' },
+      }
+      require('telescope').load_extension 'dbtpal'
     end,
   },
 
