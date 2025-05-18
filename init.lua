@@ -806,8 +806,9 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff_format', 'ruff_organize_imports' },
-        sql = { 'sqlfluff' },
+        -- sql = { 'sqlfluff' },
         markdown = { 'markdownlint' },
+        css = { 'css_beauty' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -971,6 +972,21 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+      local MiniFiles = require 'mini.files'
+      MiniFiles.setup {}
+      vim.keymap.set('n', '<leader>fe', function()
+        if vim.bo.buftype == 'terminal' then
+          MiniFiles.open()
+          return
+        end
+        local filepath = vim.api.nvim_buf_get_name(0)
+        MiniFiles.open(vim.fn.fnamemodify(filepath, ':p:h'))
+      end, { desc = 'Open mini.files in current file dir' })
+
+      -- Open in project root
+      vim.keymap.set('n', '<leader>fE', function()
+        MiniFiles.open()
+      end, { desc = 'Open mini.files in project root' })
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -1065,8 +1081,6 @@ require('lazy').setup({
       'rcarriga/nvim-dap-ui',
       -- Required dependency for nvim-dap-ui
       'nvim-neotest/nvim-nio',
-      -- Installs the debug adapters for you
-      'williamboman/mason.nvim',
     },
     keys = {
       -- Basic debugging keymaps, feel free to change to your liking!
@@ -1152,6 +1166,20 @@ require('lazy').setup({
           },
         },
       }
+      dap.adapters.python = {
+        type = 'executable',
+        command = 'uv',
+        args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
+      }
+
+      dap.configurations.python = {
+        {
+          type = 'python',
+          request = 'launch',
+          name = 'Launch file',
+          program = '${file}',
+        },
+      }
 
       -- Change breakpoint icons
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
@@ -1171,117 +1199,6 @@ require('lazy').setup({
 
       -- Install golang specific config
     end,
-  },
-  {
-    'mfussenegger/nvim-dap-python',
-    ft = 'python',
-    dependencies = {
-      'mfussenegger/nvim-dap',
-      'rcarriga/nvim-dap-ui',
-      'nvim-neotest/nvim-nio',
-    },
-    config = function(_, opts)
-      local dap_python = require 'dap-python'
-      dap_python.setup('uv', opts)
-      dap_python.test_runner = 'pytest'
-      local dap = require 'dap'
-      local configs = {}
-      dap.configurations.python = configs
-      table.insert(configs, {
-        type = 'python',
-        program = '${file}',
-        request = 'launch',
-        name = 'Launch ops washing streamlit',
-        python = 'uv run --env-file .env/ops_washing.env --group ops_washing -m streamlit run src/apps/main.py -- --app ops_washing',
-        console = opts.console,
-      })
-      -- table.insert(configs, {
-      --   type = 'python',
-      --   request = 'launch',
-      --   name = 'Launch file',
-      --   program = '${file}',
-      --   console = opts.console,
-      --   pythonPath = opts.pythonPath,
-      -- })
-      -- table.insert(configs, {
-      --   type = 'python',
-      --   request = 'launch',
-      --   name = 'Launch file with arguments',
-      --   program = '${file}',
-      --   args = function()
-      --     local args_string = vim.fn.input 'Arguments: '
-      --     return vim.split(args_string, ' +')
-      --   end,
-      --   console = opts.console,
-      --   pythonPath = opts.pythonPath,
-      -- })
-      -- table.insert(configs, {
-      --   type = 'python',
-      --   request = 'launch',
-      --   name = 'Launch main.py',
-      --   program = function()
-      --     return './main.py'
-      --   end,
-      --   pythonPath = opts.pythonPath,
-      -- })
-      -- table.insert(configs, {
-      --   type = 'python',
-      --   request = 'launch',
-      --   name = 'Streamlit src/apps/main.py',
-      --   module = 'streamlit',
-      --   args = function()
-      --     return {
-      --       'run',
-      --       vim.fn.input('Streamlit app script > ', 'src/apps/main.py', 'file'),
-      --     }
-      --   end,
-      --   pythonPath = 'python',
-      --   console = 'integratedTerminal',
-      -- })
-      -- table.insert(configs, {
-      --   type = 'python',
-      --   request = 'launch',
-      --   name = 'FastAPI module',
-      --   module = 'uvicorn',
-      --   args = function()
-      --     return {
-      --       vim.fn.input('FastAPI app module > ', 'main:app', 'file'),
-      --       -- '--reload', -- doesn't work
-      --       '--use-colors',
-      --     }
-      --   end,
-      --   pythonPath = 'python',
-      --   console = 'integratedTerminal',
-      -- })
-    end,
-  },
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    version = '*',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-    },
-    cmd = 'Neotree',
-    keys = {
-      { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-    },
-    opts = {
-      filesystem = {
-        window = {
-          mappings = {
-            ['\\'] = 'close_window',
-          },
-        },
-        filtered_items = {
-          visible = true,
-          hide_dotfiles = false,
-          hide_gitignore = false,
-          hide_by_name = { '.git' },
-        },
-      },
-    },
   },
   {
     'kristijanhusak/vim-dadbod-ui',
@@ -1425,3 +1342,38 @@ vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
 })
 
 vim.keymap.set('n', '<leader>SS', '<cmd>source Session.vim<CR>', { noremap = true, silent = true, desc = '[S]ource [S]ession' })
+-- Function to transform the text
+local function convert_to_ref()
+  local word = vim.fn.expand '<cWORD>'
+  local last_part = word:match '([^%.]+)$' -- Get the part after the last dot
+  if last_part then
+    local new_text = 'ref("' .. last_part .. '")'
+    -- vim.api.nvim_feedkeys(
+    --   vim.api.nvim_replace_termcodes(new_text, true, true, true),
+    --   'n',
+    --   true
+    -- )
+    local commands = vim.api.nvim_replace_termcodes(new_text, true, true, true)
+    print(commands)
+  end
+end
+
+-- Map the function to a key (for example, <leader>r in normal mode)
+vim.keymap.set('n', '<leader>mm', convert_to_ref, { noremap = true, silent = true })
+
+-- Function to replace word under cursor with ref("foo")
+local function replace_with_ref()
+  vim.cmd 'E'
+  local bufnr = 0
+  local row, col = unpack(vim.api.nvim_win_get_cursor(bufnr))
+  local word = vim.fn.expand '<cWORD>'
+  local new_text = 'ref("' .. word:match '([^%.]+)$' .. '")'
+  print(bufnr)
+  print(row - 1)
+  print(col - #word)
+  print(col)
+  -- vim.api.nvim_buf_set_text(bufnr, row - 1, col - #word, row - 1, col, { new_text })
+end
+
+-- Map the function to a key (for example, <leader>r in normal mode)
+vim.keymap.set('n', '<leader>r', replace_with_ref, { noremap = true, silent = true })
