@@ -158,6 +158,12 @@ vim.opt.cursorline = true
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
+-- automatic read
+vim.opt.autoread = true
+
+-- swapfiles
+vim.o.swapfile = false
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -221,7 +227,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 --
@@ -427,7 +433,7 @@ require('lazy').setup({
           find_files = { hidden = true },
           live_grep = {
             additional_args = function()
-              return { '--hidden', '--smart-case' }
+              return { '--hidden', '--smart-case', '--glob', '!.git/*' }
             end,
           },
         },
@@ -706,7 +712,6 @@ require('lazy').setup({
             },
           },
         },
-        debugpy = {},
         markdownlint = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -809,6 +814,8 @@ require('lazy').setup({
         -- sql = { 'sqlfluff' },
         markdown = { 'markdownlint' },
         css = { 'css_beauty' },
+        yml = { 'yamlfmt ' },
+        yaml = { 'yamlfmt ' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -1177,7 +1184,7 @@ require('lazy').setup({
           type = 'python',
           request = 'launch',
           name = 'Launch file',
-          program = '${file}',
+          program = 'src/apps/main.py',
         },
       }
 
@@ -1221,34 +1228,7 @@ require('lazy').setup({
     end,
   },
   {
-    'PedramNavid/dbtpal',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-    ft = {
-      'sql',
-      'md',
-      'yaml',
-    },
-    keys = {
-      { '<leader>sm', "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>" },
-    },
-    config = function()
-      require('dbtpal').setup {
-        path_to_dbt = 'dbt',
-        path_to_dbt_project = '.',
-        path_to_dbt_profiles_dir = '.',
-        include_profiles_dir = true,
-        include_project_dir = true,
-        include_log_level = true,
-        extended_path_search = true,
-        protect_compiled_files = true,
-        pre_cmd_args = {},
-        post_cmd_args = { '--profile', 'ifco_digital_gwc' },
-      }
-      require('telescope').load_extension 'dbtpal'
-    end,
+    'famiu/bufdelete.nvim',
   },
 
   --- NOTE: My plugins here - end
@@ -1315,15 +1295,24 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'python',
   command = 'setlocal colorcolumn=100',
 })
+
 vim.keymap.set('n', '<leader>cp', function()
   local filepath = vim.fn.expand '%:p' -- full file path
   vim.fn.setreg('+', filepath) -- copy to system clipboard
   vim.notify('File path copied: ' .. filepath)
 end, { desc = 'Copy file path to clipboard' })
+
+vim.keymap.set('n', '<leader>cp', function()
+  local filepath = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
+  vim.fn.setreg('+', filepath) -- copy to system clipboard
+  vim.notify('File name copied: ' .. filepath)
+end, { desc = 'Copy file name to clipboard' })
+
 vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
   callback = function()
     local venv_path = vim.fn.getcwd() .. '/.venv'
     local python_bin = venv_path .. '/bin/python'
+    print(vim.fn.filereadable(python_bin))
     if vim.fn.filereadable(python_bin) == 1 then
       vim.env.VIRTUAL_ENV = venv_path
       vim.env.PATH = venv_path .. '/bin:' .. vim.env.PATH
