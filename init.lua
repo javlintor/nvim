@@ -1296,7 +1296,7 @@ vim.api.nvim_create_autocmd('FileType', {
   command = 'setlocal colorcolumn=100',
 })
 
-vim.keymap.set('n', '<leader>cp', function()
+vim.keymap.set('n', '<leader>cP', function()
   local filepath = vim.fn.expand '%:p' -- full file path
   vim.fn.setreg('+', filepath) -- copy to system clipboard
   vim.notify('File path copied: ' .. filepath)
@@ -1357,3 +1357,13 @@ end
 
 -- Map the function to a key (for example, <leader>r in normal mode)
 vim.keymap.set('n', '<leader>r', replace_with_ref, { noremap = true, silent = true })
+
+-- delete buffer
+vim.keymap.set('n', '<Space>bd', function()
+  vim.api.nvim_command 'bp|sp|bn|bd'
+end)
+
+-- change buffer
+vim.keymap.set('n', '<Tab>', function()
+  vim.api.nvim_command 'bp'
+end)
