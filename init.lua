@@ -1058,13 +1058,32 @@ require('lazy').setup({
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
   },
+  -- {
+  --   'navarasu/onedark.nvim',
+  --   dependencies = {
+  --     'nvim-tree/nvim-web-devicons',
+  --   },
+  --   config = function()
+  --     require('onedark').load()
+  --   end,
+  -- },
+
+  -- {
+  --   'folke/tokyonight.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  --   config = function()
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --   end,
+  -- },
+  --
   {
-    'navarasu/onedark.nvim',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
     config = function()
-      require('onedark').load()
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
   {
@@ -1092,13 +1111,6 @@ require('lazy').setup({
     keys = {
       -- Basic debugging keymaps, feel free to change to your liking!
       {
-        '<F5>',
-        function()
-          require('dap').continue()
-        end,
-        desc = 'Debug: Start/Continue',
-      },
-      {
         '<leader>bb',
         function()
           require('dap').continue()
@@ -1106,47 +1118,11 @@ require('lazy').setup({
         desc = 'Debug: Start/Continue',
       },
       {
-        '<F1>',
-        function()
-          require('dap').step_into()
-        end,
-        desc = 'Debug: Step Into',
-      },
-      {
-        '<F2>',
-        function()
-          require('dap').step_over()
-        end,
-        desc = 'Debug: Step Over',
-      },
-      {
-        '<F3>',
-        function()
-          require('dap').step_out()
-        end,
-        desc = 'Debug: Step Out',
-      },
-      {
-        '<leader>b',
-        function()
-          require('dap').toggle_breakpoint()
-        end,
-        desc = 'Debug: Toggle Breakpoint',
-      },
-      {
         '<leader>B',
         function()
-          require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+          require('dap').set_breakpoint()
         end,
         desc = 'Debug: Set Breakpoint',
-      },
-      -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-      {
-        '<F7>',
-        function()
-          require('dapui').toggle()
-        end,
-        desc = 'Debug: See last session result.',
       },
     },
     config = function()
@@ -1173,20 +1149,35 @@ require('lazy').setup({
           },
         },
       }
+
       dap.adapters.python = {
         type = 'executable',
         command = 'uv',
-        args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
+        args = { 'run', '--group', 'ops_washing', '--env-file', '.env/ops_washing.env', 'python', '-m', 'debugpy.adapter' },
       }
-
       dap.configurations.python = {
         {
           type = 'python',
           request = 'launch',
-          name = 'Launch file',
+          name = 'Ops Washing Data App',
           program = 'src/apps/main.py',
+          pythonArgs = {
+            '-m',
+            'streamlit',
+            'run',
+            'src/apps/main.py',
+            '--server.port',
+            '8080',
+            '--',
+            '--app',
+            'ops_washing',
+          },
+          justMyCode = false,
+          envFile = '.env/ops_washing.env',
         },
       }
+
+      --  "app_name=ops_washing && uv run --group $app_name --env-file .env/$app_name.env -m streamlit run src/apps/main.py --server.port 8080 -- --app $app_name"
 
       -- Change breakpoint icons
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
@@ -1228,7 +1219,24 @@ require('lazy').setup({
     end,
   },
   {
-    'famiu/bufdelete.nvim',
+    'hat0uma/csvview.nvim',
+    opts = {
+      parser = { comments = { '#', '//' } },
+      keymaps = {
+        -- Text objects for selecting fields
+        textobject_field_inner = { 'if', mode = { 'o', 'x' } },
+        textobject_field_outer = { 'af', mode = { 'o', 'x' } },
+        -- Excel-like navigation:
+        -- Use <Tab> and <S-Tab> to move horizontally between fields.
+        -- Use <Enter> and <S-Enter> to move vertically between rows and place the cursor at the end of the field.
+        -- Note: In terminals, you may need to enable CSI-u mode to use <S-Tab> and <S-Enter>.
+        jump_next_field_end = { '<Tab>', mode = { 'n', 'v' } },
+        jump_prev_field_end = { '<S-Tab>', mode = { 'n', 'v' } },
+        jump_next_row = { '<Enter>', mode = { 'n', 'v' } },
+        jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
+      },
+    },
+    cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
   },
 
   --- NOTE: My plugins here - end
@@ -1365,5 +1373,9 @@ end)
 
 -- change buffer
 vim.keymap.set('n', '<Tab>', function()
-  vim.api.nvim_command 'bp'
-end)
+  vim.cmd.bnext()
+end, { noremap = true, silent = true })
+
+vim.keymap.set('n', '<S-Tab>', function()
+  vim.cmd.bprevious()
+end, { noremap = true, silent = true })
