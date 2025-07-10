@@ -1081,6 +1081,9 @@ require('lazy').setup({
   {
     'catppuccin/nvim',
     name = 'catppuccin',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'catppuccin'
@@ -1153,31 +1156,17 @@ require('lazy').setup({
       dap.adapters.python = {
         type = 'executable',
         command = 'uv',
-        args = { 'run', '--group', 'ops_washing', '--env-file', '.env/ops_washing.env', 'python', '-m', 'debugpy.adapter' },
+        args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
       }
       dap.configurations.python = {
         {
           type = 'python',
           request = 'launch',
-          name = 'Ops Washing Data App',
-          program = 'src/apps/main.py',
-          pythonArgs = {
-            '-m',
-            'streamlit',
-            'run',
-            'src/apps/main.py',
-            '--server.port',
-            '8080',
-            '--',
-            '--app',
-            'ops_washing',
-          },
-          justMyCode = false,
-          envFile = '.env/ops_washing.env',
+          name = 'Streamlit',
+          module = 'streamlit',
+          args = { 'run', 'main.py' },
         },
       }
-
-      --  "app_name=ops_washing && uv run --group $app_name --env-file .env/$app_name.env -m streamlit run src/apps/main.py --server.port 8080 -- --app $app_name"
 
       -- Change breakpoint icons
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
@@ -1373,9 +1362,9 @@ end)
 
 -- change buffer
 vim.keymap.set('n', '<Tab>', function()
-  vim.cmd.bnext()
+  vim.cmd.bprevious()
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<S-Tab>', function()
-  vim.cmd.bprevious()
+  vim.cmd.bnext()
 end, { noremap = true, silent = true })
