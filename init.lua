@@ -1111,23 +1111,6 @@ require('lazy').setup({
       -- Required dependency for nvim-dap-ui
       'nvim-neotest/nvim-nio',
     },
-    keys = {
-      -- Basic debugging keymaps, feel free to change to your liking!
-      {
-        '<leader>bb',
-        function()
-          require('dap').continue()
-        end,
-        desc = 'Debug: Start/Continue',
-      },
-      {
-        '<leader>B',
-        function()
-          require('dap').set_breakpoint()
-        end,
-        desc = 'Debug: Set Breakpoint',
-      },
-    },
     config = function()
       local dap = require 'dap'
       local dapui = require 'dapui'
@@ -1153,20 +1136,41 @@ require('lazy').setup({
         },
       }
 
-      dap.adapters.python = {
-        type = 'executable',
-        command = 'uv',
-        args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
-      }
-      dap.configurations.python = {
-        {
-          type = 'python',
+      local apps = { 'ops_washing', 'retail_forecaster' }
+
+      for _, app in ipairs(apps) do
+        dap.adapters[app] = {
+          type = 'executable',
+          command = 'uv',
+          args = {
+            'run',
+            '--group',
+            app,
+            '--env-file',
+            string.format('.env/%s.env', app),
+            'python',
+            '-m',
+            'debugpy.adapter',
+          },
+        }
+
+        dap.configurations.python = dap.configurations.python or {}
+        table.insert(dap.configurations.python, {
+          type = app,
           request = 'launch',
-          name = 'Streamlit',
+          name = 'Streamlit ' .. app,
           module = 'streamlit',
-          args = { 'run', 'main.py' },
-        },
-      }
+          args = {
+            'run',
+            'src/apps/main.py',
+            '--server.port',
+            '8080',
+            '--',
+            '--app',
+            app,
+          },
+        })
+      end
 
       -- Change breakpoint icons
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
