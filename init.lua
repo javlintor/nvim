@@ -816,7 +816,7 @@ require('lazy').setup({
         python = { 'ruff_format', 'ruff_organize_imports' },
         -- sql = { 'sqlfluff' },
         markdown = { 'markdownlint' },
-        css = { 'css_beauty' },
+        css = { 'prettier' },
         yml = { 'yamlfmt ' },
         yaml = { 'yamlfmt ' },
         javascript = { 'prettier' },
