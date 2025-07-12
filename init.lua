@@ -816,9 +816,9 @@ require('lazy').setup({
         css = { 'css_beauty' },
         yml = { 'yamlfmt ' },
         yaml = { 'yamlfmt ' },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettier' },
+        jsx = { 'prettier' },
+        javascriptreact = { 'prettier' }, -- Just in case
       },
     },
   },
