@@ -432,6 +432,7 @@ require('lazy').setup({
         pickers = {
           find_files = { hidden = true },
           live_grep = {
+            file_ignore_patterns = { 'seeds' },
             additional_args = function()
               return { '--hidden', '--smart-case', '--glob', '!.git/*' }
             end,
@@ -818,7 +819,7 @@ require('lazy').setup({
         yaml = { 'yamlfmt ' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1002,7 +1003,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc', 'python' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc', 'python', 'sql' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1090,16 +1091,8 @@ require('lazy').setup({
     end,
   },
   {
-    'stevanmilic/nvim-lspimport',
-    config = function()
-      vim.keymap.set('n', '<leader>a', require('lspimport').import, { noremap = true })
-    end,
-  },
-  {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
-    ---@module "ibl"
-    ---@type ibl.config
     opts = {},
   },
 
@@ -1190,6 +1183,29 @@ require('lazy').setup({
 
       -- Install golang specific config
     end,
+    keys = {
+      {
+        '<leader>B',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'DAP: Toggle Breakpoint',
+      },
+      {
+        '<leader>bb',
+        function()
+          local dap = require 'dap'
+          if dap.session() then
+            dap.terminate()
+            vim.notify('DAP session terminated', vim.log.levels.INFO)
+          else
+            dap.continue()
+            vim.notify('DAP session started', vim.log.levels.INFO)
+          end
+        end,
+        desc = 'DAP: Continue or Terminate',
+      },
+    },
   },
   {
     'kristijanhusak/vim-dadbod-ui',
@@ -1372,3 +1388,16 @@ end, { noremap = true, silent = true })
 vim.keymap.set('n', '<S-Tab>', function()
   vim.cmd.bnext()
 end, { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>df', function()
+  vim.diagnostic.open_float()
+end, { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'html', 'astro' },
+  callback = function()
+    vim.opt_local.shiftwidth = 4 -- indentation width
+    vim.opt_local.tabstop = 4 -- number of spaces a tab counts for
+    vim.opt_local.softtabstop = 4
+  end,
+})
