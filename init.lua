@@ -723,6 +723,9 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        ts_ls = {
+          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -814,12 +817,12 @@ require('lazy').setup({
         python = { 'ruff_format', 'ruff_organize_imports' },
         -- sql = { 'sqlfluff' },
         markdown = { 'markdownlint' },
-        css = { 'css_beauty' },
+        css = { 'prettier' },
         yml = { 'yamlfmt ' },
         yaml = { 'yamlfmt ' },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettier' },
+        jsx = { 'prettier' },
+        javascriptreact = { 'prettier' }, -- Just in case
       },
     },
   },
