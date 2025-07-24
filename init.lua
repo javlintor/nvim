@@ -727,6 +727,8 @@ require('lazy').setup({
           filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
         },
 
+        astro = { 'astro' },
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
