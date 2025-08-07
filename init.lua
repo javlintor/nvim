@@ -487,10 +487,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
-
-      vim.keymap.set('n', '<leader>ei', function()
-        vim.cmd('edit ' .. vim.fn.stdpath 'config' .. '/init.lua')
-      end, { desc = '[E]edit [I]nit.lua' })
     end,
   },
 
@@ -825,6 +821,7 @@ require('lazy').setup({
         javascript = { 'prettier' },
         jsx = { 'prettier' },
         javascriptreact = { 'prettier' }, -- Just in case
+        astro = { 'prettier' },
       },
     },
   },
@@ -968,21 +965,6 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
       local MiniFiles = require 'mini.files'
@@ -1064,26 +1046,6 @@ require('lazy').setup({
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
   },
-  -- {
-  --   'navarasu/onedark.nvim',
-  --   dependencies = {
-  --     'nvim-tree/nvim-web-devicons',
-  --   },
-  --   config = function()
-  --     require('onedark').load()
-  --   end,
-  -- },
-
-  -- {
-  --   'folke/tokyonight.nvim',
-  --   lazy = false,
-  --   priority = 1000,
-  --   opts = {},
-  --   config = function()
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --   end,
-  -- },
-  --
   {
     'catppuccin/nvim',
     name = 'catppuccin',
@@ -1094,11 +1056,6 @@ require('lazy').setup({
     config = function()
       vim.cmd.colorscheme 'catppuccin'
     end,
-  },
-  {
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
-    opts = {},
   },
 
   {
@@ -1252,6 +1209,17 @@ require('lazy').setup({
     },
     cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
   },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'auto',
+        },
+      }
+    end,
+  },
 
   --- NOTE: My plugins here - end
   -----
@@ -1385,15 +1353,6 @@ vim.keymap.set('n', '<Space>bd', function()
   vim.api.nvim_command 'bp|sp|bn|bd'
 end)
 
--- change buffer
-vim.keymap.set('n', '<Tab>', function()
-  vim.cmd.bprevious()
-end, { noremap = true, silent = true })
-
-vim.keymap.set('n', '<S-Tab>', function()
-  vim.cmd.bnext()
-end, { noremap = true, silent = true })
-
 vim.keymap.set('n', '<leader>df', function()
   vim.diagnostic.open_float()
 end, { noremap = true, silent = true })
@@ -1401,8 +1360,17 @@ end, { noremap = true, silent = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'html', 'astro' },
   callback = function()
-    vim.opt_local.shiftwidth = 4 -- indentation width
-    vim.opt_local.tabstop = 4 -- number of spaces a tab counts for
-    vim.opt_local.softtabstop = 4
+    local n_char = 2
+    vim.opt_local.shiftwidth = n_char -- indentation width
+    vim.opt_local.tabstop = n_char -- number of spaces a tab counts for
+    vim.opt_local.softtabstop = n_char
   end,
 })
+
+vim.keymap.set('n', '<leader>ei', function()
+  vim.cmd('edit ' .. vim.fn.stdpath 'config' .. '/init.lua')
+end, { desc = '[E]edit [I]nit.lua' })
+
+vim.keymap.set('n', '<leader>eg', function()
+  vim.cmd('edit ' .. '/Users/jlinares/Library/Application Support/com.mitchellh.ghostty/config')
+end, { desc = '[E]edit [I]nit.lua' })
