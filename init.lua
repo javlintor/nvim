@@ -455,13 +455,13 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sF', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sf', builtin.git_files, { desc = '[S]earch Git [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', function()
+      vim.keymap.set('n', '<leader>ss', function()
         builtin.buffers { sort_lastused = true }
       end, { desc = '[ ] Find existing buffers' })
 
@@ -702,6 +702,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
+        -- sqlls = { filetypes = { 'sql' } },
         pyright = {
           settings = {
             python = {
@@ -783,7 +784,7 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>ff',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
@@ -813,7 +814,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff_format', 'ruff_organize_imports' },
-        -- sql = { 'sqlfluff' },
+        sql = { 'sqlfmt' },
         markdown = { 'markdownlint' },
         css = { 'prettier' },
         yml = { 'yamlfmt ' },
@@ -822,6 +823,21 @@ require('lazy').setup({
         jsx = { 'prettier' },
         javascriptreact = { 'prettier' }, -- Just in case
         astro = { 'prettier' },
+      },
+      formatters = {
+        sqruff = function()
+          local util = require 'conform.util'
+          return {
+            command = 'sqruff',
+            stdin = false,
+            args = { 'fix', '$FILENAME', '--config', vim.fn.expand '~/dotfiles/.sqruff' },
+            cwd = util.root_file {
+              -- https://github.com/quarylabs/sqruff/tree/main#configuration
+              '.sqruff',
+            },
+            require_cwd = false,
+          }
+        end,
       },
     },
   },
@@ -1054,7 +1070,7 @@ require('lazy').setup({
     },
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'catppuccin-frappe'
     end,
   },
 
@@ -1217,6 +1233,19 @@ require('lazy').setup({
         options = {
           theme = 'auto',
         },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = {
+            {
+              'filename',
+              path = 1, -- 👈 Show relative path (use 2 for absolute path)
+            },
+          },
+          lualine_x = { 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = {},
+        },
       }
     end,
   },
@@ -1372,5 +1401,5 @@ vim.keymap.set('n', '<leader>ei', function()
 end, { desc = '[E]edit [I]nit.lua' })
 
 vim.keymap.set('n', '<leader>eg', function()
-  vim.cmd('edit ' .. '/Users/jlinares/Library/Application Support/com.mitchellh.ghostty/config')
+  vim.cmd('edit ' .. '/Users/jlinares/.config/ghostty/config')
 end, { desc = '[E]edit [I]nit.lua' })
