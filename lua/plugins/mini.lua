@@ -1,5 +1,30 @@
 return { -- Collection of various small independent plugins/modules
   'echasnovski/mini.nvim',
+  keys = {
+    {
+      '<leader>fe',
+      function()
+        local mf = require 'mini.files'
+        if vim.bo.buftype == 'terminal' then
+          mf.open()
+          return
+        end
+        local filepath = vim.api.nvim_buf_get_name(0)
+        MiniFiles.open(vim.fn.fnamemodify(filepath, ':p:h'))
+      end,
+      mode = 'n',
+      desc = 'Open mini.files in current file dir',
+    },
+    {
+      '<leader>fE',
+      function()
+        local mf = require 'mini.files'
+        mf.open(vim.fn.getcwd())
+      end,
+      mode = 'n',
+      desc = 'Open mini.files in project root',
+    },
+  },
   config = function()
     -- Better Around/Inside textobjects
     --
@@ -15,23 +40,6 @@ return { -- Collection of various small independent plugins/modules
     -- - sd'   - [S]urround [D]elete [']quotes
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
-
-    -- ... and there is more!
-    --  Check out: https://github.com/echasnovski/mini.nvim
-    local MiniFiles = require 'mini.files'
-    MiniFiles.setup {}
-    vim.keymap.set('n', '<leader>fe', function()
-      if vim.bo.buftype == 'terminal' then
-        MiniFiles.open()
-        return
-      end
-      local filepath = vim.api.nvim_buf_get_name(0)
-      MiniFiles.open(vim.fn.fnamemodify(filepath, ':p:h'))
-    end, { desc = 'Open mini.files in current file dir' })
-
-    -- Open in project root
-    vim.keymap.set('n', '<leader>fE', function()
-      MiniFiles.open()
-    end, { desc = 'Open mini.files in project root' })
+    require('mini.files').setup()
   end,
 }
