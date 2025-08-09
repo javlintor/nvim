@@ -1,9 +1,5 @@
 return {
-  {
-    'FabijanZulj/blame.nvim',
-    lazy = false,
-    config = function()
-      require('blame').setup {}
-    end,
-  },
+  lazy = false,
+  'FabijanZulj/blame.nvim',
+  opts = {},
 }
