@@ -6,3 +6,5 @@ nvim
 spell/
 lazy-lock.json
 .env
+
+Session.vim
