@@ -34,7 +34,6 @@ return { -- Autoformat
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
       python = { 'ruff_format', 'ruff_organize_imports' },
-      sql = { 'sqlfmt' },
       markdown = { 'markdownlint' },
       css = { 'prettier' },
       yml = { 'yamlfmt ' },
