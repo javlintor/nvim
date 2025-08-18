@@ -36,6 +36,8 @@ return { -- Autoformat
       python = { 'ruff_format', 'ruff_organize_imports' },
       markdown = { 'markdownlint' },
       css = { 'prettier' },
+      html = { 'prettier' },
+      j2 = { 'prettier' },
       yml = { 'yamlfmt ' },
       yaml = { 'yamlfmt ' },
       javascript = { 'prettier' },

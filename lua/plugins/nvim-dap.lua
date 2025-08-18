@@ -33,6 +33,7 @@ return {
 
     local apps = { 'ops_washing', 'retail_forecaster' }
 
+    dap.configurations.python = dap.configurations.python or {}
     for _, app in ipairs(apps) do
       dap.adapters[app] = {
         type = 'executable',
@@ -49,7 +50,6 @@ return {
         },
       }
 
-      dap.configurations.python = dap.configurations.python or {}
       table.insert(dap.configurations.python, {
         type = app,
         request = 'launch',
@@ -66,6 +66,12 @@ return {
         },
       })
     end
+    table.insert(dap.configurations.python, {
+      type = 'ops_washing',
+      request = 'launch',
+      name = 'Launch script ops_washing',
+      program = '${file}',
+    })
 
     -- Change breakpoint icons
     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
