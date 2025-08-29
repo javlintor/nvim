@@ -37,6 +37,7 @@ return { -- Autoformat
       markdown = { 'markdownlint' },
       css = { 'prettier' },
       html = { 'prettier' },
+      jinja = { 'prettier' },
       j2 = { 'prettier' },
       yml = { 'yamlfmt ' },
       yaml = { 'yamlfmt ' },

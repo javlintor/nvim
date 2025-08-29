@@ -41,6 +41,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
+    local actions = require 'telescope.actions'
     require('telescope').setup {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
@@ -48,11 +49,16 @@ return { -- Fuzzy Finder (files, lsp, etc)
       defaults = {
         file_ignore_patterns = { '.venv', 'uv.lock' },
         path_display = { 'smart' },
+        mappings = {
+          n = {
+            ['dd'] = actions.delete_buffer,
+          },
+        },
       },
       pickers = {
-        find_files = { hidden = true },
+        find_files = { hidden = true, file_ignore_patterns = { '.git/*', 'node_modules' } },
         live_grep = {
-          file_ignore_patterns = { 'seeds' },
+          file_ignore_patterns = { 'seeds', 'node_modules/*' },
           additional_args = function()
             return { '--hidden', '--smart-case', '--glob', '!.git/*' }
           end,
@@ -82,7 +88,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
     vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
     vim.keymap.set('n', '<leader>ss', function()
-      builtin.buffers { sort_lastused = true }
+      builtin.buffers {
+        sort_mru = true,
+        ignore_current_buffer = true,
+        filter_function = function(bufnr)
+          return vim.api.nvim_buf_get_option(bufnr, 'buftype') ~= 'terminal'
+        end,
+      }
     end, { desc = '[ ] Find existing buffers' })
 
     -- Slightly advanced example of overriding default behavior and theme

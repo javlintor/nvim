@@ -62,3 +62,9 @@ vim.opt.autoread = true
 vim.o.swapfile = false
 vim.opt.scroll = 5
 vim.opt.scrolloff = 10
+
+vim.filetype.add {
+  extension = {
+    j2 = 'jinja',
+  },
+}
