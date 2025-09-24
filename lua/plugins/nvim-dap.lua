@@ -5,6 +5,8 @@ return {
     'rcarriga/nvim-dap-ui',
     -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
+    'mfussenegger/nvim-dap-python',
+    'theHamsta/nvim-dap-virtual-text',
   },
   config = function()
     local dap = require 'dap'
@@ -12,6 +14,26 @@ return {
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
+      layouts = {
+        {
+          elements = {
+            'scopes',
+            'breakpoints',
+            'stacks',
+            'watches',
+          },
+          size = 40,
+          position = 'left',
+        },
+        {
+          elements = {
+            'repl', -- this is the dap-terminal
+            -- 'console', -- optional: dap-ui also has a console separate from REPL
+          },
+          size = 10,
+          position = 'bottom',
+        },
+      },
       -- Set icons to characters that are more likely to work in every terminal.
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
@@ -30,8 +52,11 @@ return {
         },
       },
     }
+    require('nvim-dap-virtual-text').setup()
+    require('dap-python').setup 'uv'
 
     local apps = { 'ops_washing', 'retail_forecaster' }
+    -- TODO: only evaluate expresions in dap, not internal methods
 
     dap.configurations.python = dap.configurations.python or {}
     for _, app in ipairs(apps) do
@@ -112,6 +137,13 @@ return {
         end
       end,
       desc = 'DAP: Continue or Terminate',
+    },
+    {
+      '<leader>?',
+      function()
+        require('dapui').eval(nil, { enter = true })
+      end,
+      desc = 'DAP: inspect',
     },
   },
 }
