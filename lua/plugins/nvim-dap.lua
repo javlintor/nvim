@@ -43,7 +43,7 @@ return {
           '--group',
           app,
           '--env-file',
-          string.format('.env/%s.env', app),
+          string.format('.env-files/%s.env', app),
           'python',
           '-m',
           'debugpy.adapter',
