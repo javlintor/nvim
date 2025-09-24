@@ -1,9 +1,7 @@
 return {
   'mfussenegger/nvim-dap',
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-    -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
     'mfussenegger/nvim-dap-python',
     'theHamsta/nvim-dap-virtual-text',
@@ -19,16 +17,13 @@ return {
           elements = {
             'scopes',
             'breakpoints',
-            'stacks',
-            'watches',
           },
           size = 40,
           position = 'left',
         },
         {
           elements = {
-            'repl', -- this is the dap-terminal
-            -- 'console', -- optional: dap-ui also has a console separate from REPL
+            'repl',
           },
           size = 10,
           position = 'bottom',
