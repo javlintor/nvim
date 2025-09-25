@@ -39,6 +39,8 @@ return { -- Autoformat
       html = { 'prettier' },
       jinja = { 'prettier' },
       j2 = { 'prettier' },
+      -- TODO: configure sql formater
+      sql = { 'sqruff' },
       yml = { 'yamlfmt ' },
       yaml = { 'yamlfmt ' },
       javascript = { 'prettier' },
