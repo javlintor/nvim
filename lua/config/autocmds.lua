@@ -65,3 +65,10 @@ vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.j2',
+  callback = function()
+    vim.bo.filetype = 'sql'
+  end,
+})
