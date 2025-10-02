@@ -31,16 +31,6 @@ end)
 vim.keymap.set('n', '<leader>df', function()
   vim.diagnostic.open_float()
 end, { noremap = true, silent = true })
--- for html or astro files, set indentation to 2
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'html', 'astro' },
-  callback = function()
-    local n_char = 2
-    vim.opt_local.shiftwidth = n_char -- indentation width
-    vim.opt_local.tabstop = n_char -- number of spaces a tab counts for
-    vim.opt_local.softtabstop = n_char
-  end,
-})
 -- edit ghostty configuration file
 vim.keymap.set('n', '<leader>eg', function()
   vim.cmd('edit ' .. '/Users/jlinares/.config/ghostty/config')

@@ -100,6 +100,8 @@ return {
       init_options = { settings = { logLevel = 'debug' } },
     }
 
+    lspconfig.tailwindcss.setup {}
+
     -- Astro
     lspconfig.astro.setup {}
 

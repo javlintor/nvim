@@ -68,3 +68,5 @@ vim.filetype.add {
     j2 = 'jinja',
   },
 }
+
+vim.opt_local.tabstop = 4

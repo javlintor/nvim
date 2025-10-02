@@ -66,9 +66,11 @@ vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
-  pattern = '*.j2',
+-- for html or astro files, set indentation to 2
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'html', 'astro' },
   callback = function()
-    vim.bo.filetype = 'sql'
+    local n_char = 2
+    vim.opt_local.tabstop = n_char
   end,
 })

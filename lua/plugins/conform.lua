@@ -41,8 +41,7 @@ return { -- Autoformat
       j2 = { 'prettier' },
       -- TODO: configure sql formater
       sql = { 'sqruff' },
-      yml = { 'yamlfmt ' },
-      yaml = { 'yamlfmt ' },
+      json = { 'prettier' },
       javascript = { 'prettier' },
       jsx = { 'prettier' },
       javascriptreact = { 'prettier' }, -- Just in case
