@@ -10,7 +10,7 @@ return { -- Collection of various small independent plugins/modules
           return
         end
         local filepath = vim.api.nvim_buf_get_name(0)
-        MiniFiles.open(vim.fn.fnamemodify(filepath, ':p:h'))
+        MiniFiles.open(vim.fn.fnamemodify(filepath, ':p'))
       end,
       mode = 'n',
       desc = 'Open mini.files in current file dir',
