@@ -3,8 +3,6 @@ return {
   dependencies = {
     'rcarriga/nvim-dap-ui',
     'nvim-neotest/nvim-nio',
-    'mfussenegger/nvim-dap-python',
-    'theHamsta/nvim-dap-virtual-text',
   },
   config = function()
     local dap = require 'dap'
@@ -47,13 +45,10 @@ return {
         },
       },
     }
-    require('nvim-dap-virtual-text').setup()
-    require('dap-python').setup 'uv'
 
     local apps = { 'ops_washing', 'retail_forecaster' }
-    -- TODO: only evaluate expresions in dap, not internal methods
 
-    dap.configurations.python = dap.configurations.python or {}
+    -- adapters
     for _, app in ipairs(apps) do
       dap.adapters[app] = {
         type = 'executable',
@@ -70,6 +65,8 @@ return {
         },
       }
 
+      -- configurations
+      dap.configurations.python = dap.configurations.python or {}
       table.insert(dap.configurations.python, {
         type = app,
         request = 'launch',
@@ -86,11 +83,36 @@ return {
         },
       })
     end
+
+    dap.adapters.python = {
+      type = 'executable',
+      command = 'uv', -- use uv to run python
+      args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
+    }
     table.insert(dap.configurations.python, {
-      type = 'ops_washing',
+      type = 'python',
       request = 'launch',
-      name = 'Launch script ops_washing',
+      name = 'Debug python file',
       program = '${file}',
+    })
+    table.insert(dap.configurations.python, {
+      type = 'python',
+      request = 'launch',
+      name = 'Debug pytest file',
+      module = 'pytest',
+      args = { '${file}' },
+    })
+    table.insert(dap.configurations.python, {
+      type = 'python',
+      request = 'launch',
+      name = 'Debug pytest function',
+      module = 'pytest',
+      args = function()
+        local path = vim.fn.expand '%'
+        local line = vim.fn.line '.'
+        -- TODO: use tresitter to find method name
+        return { path .. '::' .. vim.fn.expand '<cword>' }
+      end,
     })
 
     -- Change breakpoint icons
