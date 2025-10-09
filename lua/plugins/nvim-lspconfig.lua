@@ -19,13 +19,9 @@ return {
 
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-        map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
         map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-        map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-        map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
@@ -77,16 +73,16 @@ return {
     }
 
     -- === Disable Ruff hover ===
-    vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and client.name == 'ruff' then
-          client.server_capabilities.hoverProvider = false
-        end
-      end,
-      desc = 'LSP: Disable hover capability from Ruff',
-    })
+    -- vim.api.nvim_create_autocmd('LspAttach', {
+    --   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+    --   callback = function(args)
+    --     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    --     if client and client.name == 'ruff' then
+    --       client.server_capabilities.hoverProvider = false
+    --     end
+    --   end,
+    --   desc = 'LSP: Disable hover capability from Ruff',
+    -- })
 
     -- === Capabilities ===
     local capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities())
@@ -97,7 +93,11 @@ return {
     -- Ruff
     lspconfig.ruff.setup {
       capabilities = capabilities,
-      init_options = { settings = { logLevel = 'debug' } },
+      init_options = {
+        settings = {
+          configuration = '~/dotfiles/.ruff.toml',
+        },
+      },
     }
 
     lspconfig.tailwindcss.setup {}

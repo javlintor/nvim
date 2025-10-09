@@ -33,7 +33,7 @@ return { -- Autoformat
     formatters_by_ft = {
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
-      python = { 'ruff_format', 'ruff_organize_imports' },
+      python = { 'ruff_fix' },
       markdown = { 'markdownlint' },
       css = { 'prettier' },
       html = { 'prettier' },
@@ -61,6 +61,18 @@ return { -- Autoformat
           require_cwd = false,
         }
       end,
+    },
+
+    ruff_fix = {
+      args = {
+        'check',
+        '--fix',
+        '--config',
+        vim.fn.expand '~/.dotfiles/.ruff.toml',
+        '--stdin-filename',
+        '$FILENAME',
+        '-',
+      },
     },
   },
 }
