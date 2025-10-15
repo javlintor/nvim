@@ -102,6 +102,8 @@ return {
 
     lspconfig.tailwindcss.setup {}
 
+    lspconfig.terraformls.setup {}
+
     -- Astro
     lspconfig.astro.setup {}
 
