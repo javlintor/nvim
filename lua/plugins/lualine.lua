@@ -7,11 +7,23 @@ return {
     },
     sections = {
       lualine_a = { 'mode' },
-      lualine_b = { 'branch' },
+      lualine_b = {
+        {
+          function()
+            -- Get the current working directory
+            local cwd = vim.fn.getcwd()
+            -- Extract just the folder name (repo name)
+            return vim.fn.fnamemodify(cwd, ':t')
+          end,
+          icon = '', -- folder/repo icon (requires nvim-web-devicons)
+          color = { fg = '#ffffff', gui = 'bold' },
+        },
+        'branch',
+      },
       lualine_c = {
         {
           'filename',
-          path = 1, -- 👈 Show relative path (use 2 for absolute path)
+          path = 1, -- relative path (2 for absolute)
         },
       },
       lualine_x = { 'filetype' },
