@@ -16,7 +16,7 @@ return {
             return vim.fn.fnamemodify(cwd, ':t')
           end,
           icon = '', -- folder/repo icon (requires nvim-web-devicons)
-          color = { fg = '#ffffff', gui = 'bold' },
+          color = { fg = '#ffffff' },
         },
         'branch',
       },
