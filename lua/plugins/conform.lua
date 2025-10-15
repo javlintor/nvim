@@ -46,6 +46,9 @@ return { -- Autoformat
       jsx = { 'prettier' },
       javascriptreact = { 'prettier' }, -- Just in case
       astro = { 'prettier' },
+      terraform = { 'terraform_fmt' },
+      tf = { 'terraform_fmt' },
+      hcl = { 'terraform_fmt' },
     },
     formatters = {
       sqruff = function()
