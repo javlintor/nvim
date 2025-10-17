@@ -102,8 +102,9 @@ return {
 
     lspconfig.tailwindcss.setup {}
 
-    lspconfig.terraformls.setup {}
+    -- Terraform
     lspconfig.terraform_lsp.setup {}
+    -- lspconfig.terraformls.setup {}
 
     -- Astro
     lspconfig.astro.setup {}
