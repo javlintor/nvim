@@ -11,12 +11,6 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
--- source current file
-vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>') -- <CR> simulates pressing enter
--- source current line
-vim.keymap.set('n', '<space>x', ':.lua<CR>')
--- source selected section
-vim.keymap.set('v', '<space>x', ':lua<CR>')
 -- center text after <C-d> or <C-u>
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
