@@ -18,17 +18,9 @@ return { -- Fuzzy Finder (files, lsp, etc)
       end,
     },
     { 'nvim-telescope/telescope-ui-select.nvim' },
-    {
-      'folke/trouble.nvim',
-      dependencies = { 'nvim-tree/nvim-web-devicons' },
-      opts = {
-        use_diagnostic_signs = true,
-      },
-    },
   },
   config = function()
     local actions = require 'telescope.actions'
-    local open_with_trouble = require('trouble.sources.telescope').open
     require('telescope').setup {
       defaults = {
         file_ignore_patterns = { '.venv', 'uv.lock' },
@@ -36,11 +28,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
         mappings = {
           n = {
             ['dd'] = actions.delete_buffer,
-            ['<c-t>'] = open_with_trouble,
           },
-          i = {
-            ['<c-t>'] = open_with_trouble,
-          },
+          i = {},
         },
       },
       pickers = {
