@@ -75,39 +75,38 @@ return {
     -- === Capabilities ===
     local capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities())
 
-    -- === Server configs ===
-    local lspconfig = require 'lspconfig'
-
+    -- -- === Server configs ===
     -- Ruff
-    lspconfig.ruff.setup {
+    vim.lsp.config('ruff', {
       capabilities = capabilities,
       init_options = {
         settings = {
           configuration = '~/dotfiles/.ruff.toml',
         },
       },
-    }
+    })
+    vim.lsp.enable 'ruff'
 
     -- Terraform
-    lspconfig.terraform_lsp.setup {}
-    -- lspconfig.terraformls.setup {}
+    vim.lsp.enable 'terraform_lsp'
 
     -- Astro
-    lspconfig.astro.setup {}
+    vim.lsp.enable 'astro'
 
     -- javascript & typescript
-    lspconfig.ts_ls.setup {}
+    vim.lsp.enable 'ts_ls'
 
     -- css
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    lspconfig.cssls.setup {
+    vim.lsp.config('cssls', {
       capabilities = capabilities,
-    }
+    })
+    vim.lsp.enable 'cssls'
 
     -- Pyright
-    lspconfig.pyright.setup {
+    vim.lsp.config('pyright', {
       capabilities = capabilities,
       before_init = function(_, config)
         local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
@@ -133,6 +132,7 @@ return {
           },
         },
       },
-    }
+    })
+    vim.lsp.enable 'pyright'
   end,
 }

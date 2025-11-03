@@ -46,7 +46,7 @@ return {
       },
     }
 
-    local apps = { 'ops_washing', 'retail_forecaster' }
+    local apps = { 'ops_washing', 'retail_forecaster', 'pool_totalizer' }
 
     -- adapters
     for _, app in ipairs(apps) do
