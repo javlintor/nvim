@@ -88,8 +88,6 @@ return {
       },
     }
 
-    lspconfig.tailwindcss.setup {}
-
     -- Terraform
     lspconfig.terraform_lsp.setup {}
     -- lspconfig.terraformls.setup {}
@@ -99,6 +97,14 @@ return {
 
     -- javascript & typescript
     lspconfig.ts_ls.setup {}
+
+    -- css
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+    lspconfig.cssls.setup {
+      capabilities = capabilities,
+    }
 
     -- Pyright
     lspconfig.pyright.setup {
