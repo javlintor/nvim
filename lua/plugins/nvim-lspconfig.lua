@@ -134,5 +134,10 @@ return {
       },
     })
     vim.lsp.enable 'pyright'
+    vim.lsp.config('sqruff', {
+      cmd = { 'sqruff', 'lsp', '--config', vim.fn.expand '~/dotfiles/.sqruff' },
+      filetypes = { 'sql' },
+    })
+    -- vim.lsp.enable 'sqruff'
   end,
 }
