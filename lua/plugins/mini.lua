@@ -44,7 +44,6 @@ return { -- Collection of various small independent plugins/modules
     require('mini.files').setup {
       windows = {
         width_focus = 100,
-        preview = true,
       },
     }
   end,
