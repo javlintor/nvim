@@ -41,6 +41,11 @@ return { -- Collection of various small independent plugins/modules
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
     require('mini.icons').setup()
-    require('mini.files').setup {}
+    require('mini.files').setup {
+      windows = {
+        width_focus = 100,
+        preview = true,
+      },
+    }
   end,
 }

@@ -6,18 +6,23 @@ return {
       theme = 'auto',
     },
     sections = {
-      lualine_a = { 'mode' },
+      lualine_a = {
+        function()
+          local mode_map = {
+            n = 'N',
+            i = 'I',
+            v = 'V',
+            V = 'VL',
+            [''] = 'VB',
+            c = 'C',
+            R = 'R',
+            t = 'T',
+          }
+          local mode = vim.fn.mode()
+          return mode_map[mode] or mode
+        end,
+      },
       lualine_b = {
-        {
-          function()
-            -- Get the current working directory
-            local cwd = vim.fn.getcwd()
-            -- Extract just the folder name (repo name)
-            return vim.fn.fnamemodify(cwd, ':t')
-          end,
-          icon = '', -- folder/repo icon (requires nvim-web-devicons)
-          color = { fg = '#ffffff' },
-        },
         'branch',
       },
       lualine_c = {
