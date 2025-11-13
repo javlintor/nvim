@@ -2,7 +2,9 @@
 
 Welcome to my neovim config.
 
-<img src="docs/images/nvim.webp" alt="neovim logo" width="80" height="80">
+<p align="center">
+<img src="docs/images/nvim.webp" alt="neovim logo" width="200" height="200">
+</p>
 
 I use **[lazy.nvim](https://github.com/folke/lazy.nvim)** as a package manager.
 
