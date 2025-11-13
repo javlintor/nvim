@@ -2,6 +2,8 @@
 
 Welcome to my neovim config.
 
+<img src="docs/images/nvim.webp" alt="neovim logo" width="80" height="80">
+
 I use **[lazy.nvim](https://github.com/folke/lazy.nvim)** as a package manager.
 
 ## Structure
