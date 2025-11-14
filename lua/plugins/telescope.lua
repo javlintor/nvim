@@ -23,7 +23,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     local actions = require 'telescope.actions'
     require('telescope').setup {
       defaults = {
-        file_ignore_patterns = { '.venv', 'uv.lock' },
+        file_ignore_patterns = { '.git/*', 'node_modules', '.venv', 'uv.lock', 'package%-lock%.json' },
         path_display = { 'smart' },
         mappings = {
           n = {
@@ -33,11 +33,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
         },
       },
       pickers = {
-        find_files = { hidden = true, file_ignore_patterns = { '.git/*', 'node_modules' } },
+        find_files = { hidden = true },
         live_grep = {
-          file_ignore_patterns = { 'seeds', 'node_modules/*' },
           additional_args = function()
-            return { '--hidden', '--smart-case', '--glob', '!.git/*' }
+            return { '--hidden', '--smart-case' }
           end,
         },
       },
