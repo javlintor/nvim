@@ -2,15 +2,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
   callback = function(event)
     local map = function(keys, func, desc, mode)
-      mode = mode or 'n'
-      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+      vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
     map('<leader>gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
     map('<leader>gr', vim.lsp.buf.references, '[G]oto [R]eferences')
     map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-    map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+    map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
@@ -63,9 +62,9 @@ vim.diagnostic.config {
     spacing = 2,
   },
 }
-
--- -- === Server configs ===
--- Ruff
+--
+-- -- -- === Server configs ===
+-- -- Ruff
 vim.lsp.config('ruff', {
   init_options = {
     settings = {
@@ -85,30 +84,21 @@ vim.lsp.enable 'astro'
 vim.lsp.enable 'ts_ls'
 
 -- css
-
 vim.lsp.config('cssls', {
   capabilities = capabilities,
+  filetypes = { 'astro', 'css' }
 })
 vim.lsp.enable 'cssls'
 
 -- Pyright
 vim.lsp.config('pyright', {
-  capabilities = capabilities,
-  before_init = function(_, config)
-    local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
-    if vim.fn.executable(venv_path) == 1 then
-      config.settings.python.pythonPath = venv_path
-    end
-  end,
-  handlers = {
-    -- Keep only 'reportUndefinedVariable'
-    ['textDocument/publishDiagnostics'] = vim.lsp.with(function(err, result, ctx, config)
-      result.diagnostics = vim.tbl_filter(function(diagnostic)
-        return diagnostic.code == 'reportUndefinedVariable'
-      end, result.diagnostics)
-      vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
-    end, {}),
-  },
+  -- capabilities = capabilities,
+  -- before_init = function(_, config)
+  --   local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
+  --   if vim.fn.executable(venv_path) == 1 then
+  --     config.settings.python.pythonPath = venv_path
+  --   end
+  -- end,
   settings = {
     pyright = { disableOrganizeImports = true },
     python = {
@@ -125,17 +115,10 @@ vim.lsp.config('sqruff', {
   filetypes = { 'sql' },
 })
 
-vim.lsp.config['lua_ls'] = {
-  -- Command and arguments to start the server.
+vim.lsp.config('lua_ls', {
   cmd = { 'lua-language-server' },
-  -- Filetypes to automatically attach to.
   filetypes = { 'lua' },
-  -- Sets the "workspace" to the directory where any of these files is found.
-  -- Files that share a root directory will reuse the LSP server connection.
-  -- Nested lists indicate equal priority, see |vim.lsp.Config|.
-  root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-  -- Specific settings to send to the server. The schema is server-defined.
-  -- Example: https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
+  root_markers = { '.luarc.json', '.luarc.jsonc' , '.git' },
   settings = {
     Lua = {
       runtime = {
@@ -143,5 +126,5 @@ vim.lsp.config['lua_ls'] = {
       }
     }
   }
-}
+})
 vim.lsp.enable('lua_ls')
