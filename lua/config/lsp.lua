@@ -78,17 +78,13 @@ vim.lsp.enable 'ruff'
 vim.lsp.enable 'terraform_lsp'
 
 -- Astro
+vim.lsp.config('astro', { filetypes = { 'astro' } })
 vim.lsp.enable 'astro'
 
 -- javascript & typescript
+vim.lsp.config('ts_ls', { filetypes = { 'javascript', 'typescript' } })
 vim.lsp.enable 'ts_ls'
 
--- css
-vim.lsp.config('cssls', {
-  capabilities = capabilities,
-  filetypes = { 'astro', 'css' }
-})
-vim.lsp.enable 'cssls'
 
 -- Pyright
 vim.lsp.config('pyright', {
@@ -118,7 +114,7 @@ vim.lsp.config('sqruff', {
 vim.lsp.config('lua_ls', {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
-  root_markers = { '.luarc.json', '.luarc.jsonc' , '.git' },
+  root_markers = { '.luarc.json', '.luarc.jsonc', '.git' },
   settings = {
     Lua = {
       runtime = {
