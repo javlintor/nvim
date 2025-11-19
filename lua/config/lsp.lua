@@ -5,8 +5,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    map('<leader>gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-    map('<leader>gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+    map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
     map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -88,13 +88,13 @@ vim.lsp.enable 'ts_ls'
 
 -- Pyright
 vim.lsp.config('pyright', {
-  -- capabilities = capabilities,
-  -- before_init = function(_, config)
-  --   local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
-  --   if vim.fn.executable(venv_path) == 1 then
-  --     config.settings.python.pythonPath = venv_path
-  --   end
-  -- end,
+  capabilities = capabilities,
+  before_init = function(_, config)
+    local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
+    if vim.fn.executable(venv_path) == 1 then
+      config.settings.python.pythonPath = venv_path
+    end
+  end,
   settings = {
     pyright = { disableOrganizeImports = true },
     python = {
