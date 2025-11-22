@@ -37,10 +37,10 @@ return { -- Autoformat
       markdown = { 'markdownlint' },
       css = { 'prettier' },
       html = { 'prettier' },
-      jinja = { 'prettier' },
-      j2 = { 'prettier' },
       -- TODO: configure sql formater
       -- sql = { 'sqruff' },
+      -- j2 = { 'sqruff' },
+      -- jinja = { 'sqruff' },
       json = { 'prettier' },
       javascript = { 'prettier' },
       jsx = { 'prettier' },
