@@ -7,7 +7,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
     map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-    map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
