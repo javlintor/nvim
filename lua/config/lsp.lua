@@ -82,7 +82,7 @@ vim.lsp.config('astro', { filetypes = { 'astro' } })
 vim.lsp.enable 'astro'
 
 -- javascript & typescript
-vim.lsp.config('ts_ls', { filetypes = { 'javascript', 'typescript' } })
+vim.lsp.config('ts_ls', { filetypes = { 'typescript' } })
 vim.lsp.enable 'ts_ls'
 
 
