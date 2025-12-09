@@ -6,7 +6,7 @@ return {
     },
     build = "make tiktoken",
     opts = {
-      -- See Configuration section for options
+      window = { layout = "horizontal" },
     },
     keys = {
       { "<leader>zz", "<cmd>CopilotChatToggle<CR>",   desc = "[Z]copilot [Z]chat Toggle",   mode = "n" },
