@@ -23,13 +23,13 @@ return {
         end,
       },
       lualine_b = {
-        'branch',
-      },
-      lualine_c = {
         {
           'filename',
           path = 1, -- relative path (2 for absolute)
         },
+      },
+      lualine_c = {
+        'branch',
       },
       lualine_x = { 'filetype' },
       lualine_y = { 'progress' },

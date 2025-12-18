@@ -41,14 +41,14 @@ vim.api.nvim_create_autocmd('FileType', {
 -- copy absolute file path
 vim.keymap.set('n', '<leader>cP', function()
   local filepath = vim.fn.expand '%:p' -- full file path
-  vim.fn.setreg('+', filepath) -- copy to system clipboard
+  vim.fn.setreg('+', filepath)         -- copy to system clipboard
   vim.notify('File path copied: ' .. filepath)
 end, { desc = 'Yanked absolute file path' })
 
 -- copy file name
 vim.keymap.set('n', '<leader>cp', function()
   local filepath = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
-  vim.fn.setreg('+', filepath) -- copy to system clipboard
+  vim.fn.setreg('+', filepath)           -- copy to system clipboard
   vim.notify('File name copied: ' .. filepath)
 end, { desc = 'Yanked file name' })
 
@@ -74,3 +74,9 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.tabstop = n_char
   end,
 })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "qf",
+--   callback = function()
+--     vim.keymap.set("n", "<CR>", "<CR>:cclose<CR>", { buffer = true, silent = true })
+--   end,
+-- })
