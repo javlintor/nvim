@@ -61,17 +61,8 @@ vim.diagnostic.config {
     spacing = 2,
   },
 }
---
--- -- -- === Server configs ===
--- -- Ruff
-vim.lsp.config('ruff', {
-  init_options = {
-    settings = {
-      configuration = '~/dotfiles/.ruff.toml',
-    },
-  },
-})
-vim.lsp.enable 'ruff'
+
+-- === Server configs ===
 
 -- Terraform
 vim.lsp.enable 'terraform_lsp'
@@ -84,27 +75,29 @@ vim.lsp.enable 'astro'
 vim.lsp.config('ts_ls', { filetypes = { 'typescript' } })
 vim.lsp.enable 'ts_ls'
 
+-- ty
+vim.lsp.enable('ty')
 
--- Pyright
-vim.lsp.config('pyright', {
-  capabilities = capabilities,
-  before_init = function(_, config)
-    local venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
-    if vim.fn.executable(venv_path) == 1 then
-      config.settings.python.pythonPath = venv_path
-    end
-  end,
-  settings = {
-    pyright = { disableOrganizeImports = true },
-    python = {
-      analysis = {
-        autoSearchPaths = true,
-        useLibraryCodeForTypes = true,
-      },
+-- Ruff
+vim.lsp.config('ruff', {
+  init_options = {
+    settings = {
+      configuration = '~/dotfiles/.ruff.toml',
     },
   },
 })
-vim.lsp.enable 'pyright'
+vim.lsp.enable 'ruff'
+-- disable code actions for ruff
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "ruff" then
+      client.server_capabilities.codeActionProvider = false
+    end
+  end,
+})
+
+-- sqruff
 vim.lsp.config('sqruff', {
   cmd = { 'sqruff', 'lsp', '--config', vim.fn.expand '~/dotfiles/.sqruff' },
   filetypes = { 'sql' },
