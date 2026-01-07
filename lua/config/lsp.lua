@@ -6,6 +6,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 
     map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    map("gd", function()
+      -- Go to the first result
+      local params = vim.lsp.util.make_position_params(0, "utf-8")
+      vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
+        if err or not result then
+          return
+        end
+        local location = result[1] or result
+        vim.lsp.util.show_document(location, "utf-8", { focus = true })
+      end)
+    end, "[G]oto [D]efinition")
     map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
