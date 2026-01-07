@@ -57,7 +57,6 @@ vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
   callback = function()
     local venv_path = vim.fn.getcwd() .. '/.venv'
     local python_bin = venv_path .. '/bin/python'
-    print(vim.fn.filereadable(python_bin))
     if vim.fn.filereadable(python_bin) == 1 then
       vim.env.VIRTUAL_ENV = venv_path
       vim.env.PATH = venv_path .. '/bin:' .. vim.env.PATH
