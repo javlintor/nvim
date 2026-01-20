@@ -19,7 +19,7 @@ return { -- Collection of various small independent plugins/modules
       '<leader>fE',
       function()
         local mf = require 'mini.files'
-        mf.open(vim.fn.getcwd())
+        mf.open(vim.fn.getcwd(), false)
       end,
       mode = 'n',
       desc = 'Open mini.files in project root',
