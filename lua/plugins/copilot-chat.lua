@@ -15,7 +15,7 @@ return {
     prompts = {
       BuildUniTest = {
         prompt =
-        'Convert the content into a csv file. Please remove the first column (@@, +++). Also remove nulls but keep commas. Transform any python datetime fields into human redable timestamp with format YYYY:MM:DDTHH:mm:ssZ.',
+        'Convert the content into a csv file. Please remove the first column (@@, +++). Also remove nulls but keep commas. Transform any python datetime fields into human redable timestamp with format YYYY:MM:DDTHH:mm:ssZ. Also sort rows using the first column of compatible with type timestamp in ascending order.',
         description = 'Convert the output of a dbt unit test into a csv file',
         resources = { 'selection' }
       },
