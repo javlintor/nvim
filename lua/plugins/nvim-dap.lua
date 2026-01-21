@@ -92,25 +92,24 @@ return {
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
-      name = 'Debug python file',
+      name = 'Debug python file (.env file required)',
       program = '${file}',
     })
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
-      name = 'Debug pytest file',
+      name = 'Debug pytest file (.env file required)',
       module = 'pytest',
       args = { '${file}' },
     })
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
-      name = 'Debug pytest function',
+      name = 'Debug pytest function (.env file required)',
       module = 'pytest',
       args = function()
         local path = vim.fn.expand '%'
         local line = vim.fn.line '.'
-        -- TODO: use tresitter to find method name
         return { path .. '::' .. vim.fn.expand '<cword>' }
       end,
     })
@@ -120,7 +119,7 @@ return {
     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
     local breakpoint_icons = vim.g.have_nerd_font
         and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+        or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
     for type, icon in pairs(breakpoint_icons) do
       local tp = 'Dap' .. type
       local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
