@@ -9,7 +9,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     local actions = require 'telescope.actions'
     require('telescope').setup {
       defaults = {
-        file_ignore_patterns = { '.git/*', 'node_modules', '.venv', 'uv.lock', 'package%-lock%.json' },
+        file_ignore_patterns = { 'node_modules', '.venv', 'uv.lock', 'package%-lock%.json', "%.git/.*", },
         path_display = { 'smart' },
         mappings = {
           n = {
