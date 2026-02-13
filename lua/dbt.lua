@@ -1,15 +1,34 @@
+local function base_picker_opts()
+  return {
+    layout_strategy = "vertical",
+    layout_config = {
+      preview_height = 0.6,
+    },
+    sorting_strategy = "ascending",
+  }
+end
+
 local function list_downstream_models()
   local builtin = require("telescope.builtin")
-  local model = vim.fn.expand '%:t:r'
-  builtin.grep_string({
-    search = model,
-    search_dirs = { "models" },
-    additional_args = { "--glob", "*.sql" }
-  })
+  local bf_model = vim.fn.expand '%:t:r'
+  builtin.grep_string(
+    vim.tbl_extend(
+      "force",
+      {
+        prompt_title = bf_model .. "+1",
+        search = bf_model,
+        search_dirs = { "models" },
+        additional_args = function()
+          return { "--glob", "*.sql" }
+        end,
+      },
+      base_picker_opts()
+    ))
 end
 
 local function list_upstream_models()
   local builtin = require('telescope.builtin')
+  local bf_model = vim.fn.expand '%:t:r'
   local models = {}
   local seen = {}
 
@@ -21,25 +40,52 @@ local function list_upstream_models()
     end
   end
 
-  builtin.find_files({
-    find_command = {
-      "fd",
-      "--type", "f",
-      "(" .. table.concat(models, "|") .. ")\\.(sql|csv)$",
-      "models",
-      "seeds",
-    },
-  })
+  builtin.find_files(
+    vim.tbl_extend(
+      "force",
+      {
+        prompt_title = "1+" .. bf_model,
+        find_command = {
+          "fd",
+          "--type", "f",
+          "(" .. table.concat(models, "|") .. ")\\.(sql|csv)$",
+          "models",
+          "seeds",
+        },
+      },
+      base_picker_opts()
+    )
+  )
+end
+
+local function open_model_documentation()
+  local bf_model = vim.fn.expand('%:t:r')
+  local model_dir = vim.fn.expand('%:h')
+  local yml_file = model_dir .. '/_' .. bf_model .. '.yml'
+  local yaml_file = model_dir .. '_' .. bf_model .. '.yaml'
+
+  local file_to_open = nil
+  if vim.fn.filereadable(yml_file) == 1 then
+    file_to_open = yml_file
+  elseif vim.fn.filereadable(yaml_file) == 1 then
+    file_to_open = yaml_file
+  else
+    vim.notify("No documentation file found for " .. bf_model, vim.log.levels.WARN)
+    return
+  end
+
+  vim.cmd('vsplit ' .. file_to_open)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "sql", "csv" },
+  pattern = { "sql" },
   callback = function(event)
     local bufnr = event.buf
 
     -- Buffer-local user commands
     vim.api.nvim_buf_create_user_command(bufnr, "DBTUptreamModels", list_upstream_models, {})
     vim.api.nvim_buf_create_user_command(bufnr, "DBTDownstreamModels", list_downstream_models, {})
+    vim.api.nvim_buf_create_user_command(bufnr, "DBTOpenModelDocs", open_model_documentation, {})
 
     -- Buffer-local keymaps
     vim.keymap.set("n", "<leader>su", list_upstream_models, {
@@ -52,6 +98,12 @@ vim.api.nvim_create_autocmd("FileType", {
       buffer = bufnr,
       silent = true,
       desc = "[S]earch [D]ownstream models",
+    })
+
+    vim.keymap.set("n", "<leader>md", open_model_documentation, {
+      buffer = bufnr,
+      silent = true,
+      desc = "open [M]odel [D]ocumentation",
     })
   end,
 })
