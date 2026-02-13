@@ -126,3 +126,10 @@ vim.lsp.config('lua_ls', {
   }
 })
 vim.lsp.enable('lua_ls')
+
+vim.lsp.config('dbt', {
+  cmd = { "dbt-language-server" },
+  filetypes = { "sql", "yaml" },
+  root_markers = { 'dbt_project.yaml', '.git' },
+})
+vim.lsp.enable('dbt')
