@@ -58,11 +58,11 @@ local function list_upstream_models()
   )
 end
 
-local function open_model_documentation()
+local function _model_documentation(action)
   local bf_model = vim.fn.expand('%:t:r')
   local model_dir = vim.fn.expand('%:h')
   local yml_file = model_dir .. '/_' .. bf_model .. '.yml'
-  local yaml_file = model_dir .. '_' .. bf_model .. '.yaml'
+  local yaml_file = model_dir .. '/_' .. bf_model .. '.yaml'
 
   local file_to_open = nil
   if vim.fn.filereadable(yml_file) == 1 then
@@ -74,7 +74,7 @@ local function open_model_documentation()
     return
   end
 
-  vim.cmd('vsplit ' .. file_to_open)
+  vim.cmd(action .. ' ' .. file_to_open)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -85,7 +85,8 @@ vim.api.nvim_create_autocmd("FileType", {
     -- Buffer-local user commands
     vim.api.nvim_buf_create_user_command(bufnr, "DBTUptreamModels", list_upstream_models, {})
     vim.api.nvim_buf_create_user_command(bufnr, "DBTDownstreamModels", list_downstream_models, {})
-    vim.api.nvim_buf_create_user_command(bufnr, "DBTOpenModelDocs", open_model_documentation, {})
+    vim.api.nvim_buf_create_user_command(bufnr, "DBTEditModelDocs", function() _model_documentation("edit") end, {})
+    vim.api.nvim_buf_create_user_command(bufnr, "DBTVsplitModelDocs", function() _model_documentation("vsplit") end, {})
 
     -- Buffer-local keymaps
     vim.keymap.set("n", "<leader>su", list_upstream_models, {
@@ -100,10 +101,16 @@ vim.api.nvim_create_autocmd("FileType", {
       desc = "[S]earch [D]ownstream models",
     })
 
-    vim.keymap.set("n", "<leader>md", open_model_documentation, {
+    vim.keymap.set("n", "<leader>md", "<cmd>DBTEditModelDocs<CR>", {
       buffer = bufnr,
       silent = true,
       desc = "open [M]odel [D]ocumentation",
+    })
+
+    vim.keymap.set("n", "<leader>mD", "<cmd>DBTVsplitModelDocs<CR>", {
+      buffer = bufnr,
+      silent = true,
+      desc = "open [M]odel [D]ocumentation (vsplit)",
     })
   end,
 })
