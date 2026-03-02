@@ -11,12 +11,17 @@ end
 local function list_downstream_models()
   local builtin = require("telescope.builtin")
   local bf_model = vim.fn.expand '%:t:r'
+
   builtin.grep_string(
     vim.tbl_extend(
       "force",
       {
         prompt_title = bf_model .. "+1",
-        search = bf_model,
+        search = string.format(
+          [[\{\{\s*ref\(\s*['"]%s['"]\s*\)\s*\}\}]],
+          bf_model
+        ),
+        use_regex = true,
         search_dirs = { "models" },
         additional_args = function()
           return { "--glob", "*.sql" }
