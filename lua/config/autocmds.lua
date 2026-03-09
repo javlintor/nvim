@@ -39,11 +39,18 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- copy absolute file path
-vim.keymap.set('n', '<leader>cP', function()
+vim.keymap.set('n', '<leader>cA', function()
   local filepath = vim.fn.expand '%:p' -- full file path
   vim.fn.setreg('+', filepath)         -- copy to system clipboard
   vim.notify('File path copied: ' .. filepath)
 end, { desc = 'Yanked absolute file path' })
+
+-- copy relative file path (from workspace root)
+vim.keymap.set('n', '<leader>cP', function()
+  local filepath = vim.fn.expand '%:.' -- %:. gets the path relative to cwd
+  vim.fn.setreg('+', filepath)         -- copy to system clipboard
+  vim.notify('Relative path copied: ' .. filepath)
+end, { desc = 'Yanked relative (to cwd) file path' })
 
 -- copy file name
 vim.keymap.set('n', '<leader>cp', function()
