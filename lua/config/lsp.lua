@@ -92,6 +92,7 @@ vim.lsp.enable('ty')
 vim.lsp.config('ruff', {
   init_options = {
     settings = {
+      configurationPreference = "filesystemFirst",
       configuration = '~/dotfiles/.ruff.toml',
     },
   },
