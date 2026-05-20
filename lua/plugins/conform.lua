@@ -49,6 +49,7 @@ return { -- Autoformat
       terraform = { 'terraform_fmt' },
       tf = { 'terraform_fmt' },
       hcl = { 'terraform_fmt' },
+      yaml = { 'yamlfmt' },
     },
 
     ruff_fix = {
