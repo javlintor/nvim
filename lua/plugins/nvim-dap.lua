@@ -92,6 +92,16 @@ return {
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
+      name = 'Debug streamlit Current Shift Overview dummy app (.env file required)',
+      module = 'streamlit',
+      args = {
+        'run',
+        '_current_shift_overview_preview.py',
+      },
+    })
+    table.insert(dap.configurations.python, {
+      type = 'python',
+      request = 'launch',
       name = 'Debug python file (.env file required)',
       program = '${file}',
     })
@@ -159,6 +169,7 @@ return {
       function()
         require('dapui').eval(nil, { enter = true })
       end,
+      mode = { 'n', 'v' },
       desc = 'DAP: inspect',
     },
   },

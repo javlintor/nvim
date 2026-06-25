@@ -34,6 +34,8 @@ return { -- Autocompletion
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-nvim-lsp-signature-help',
+    -- Completion inside the nvim-dap REPL and dap-ui input buffers.
+    'rcarriga/cmp-dap',
   },
   config = function()
     -- See `:help cmp`
@@ -48,6 +50,13 @@ return { -- Autocompletion
         end,
       },
       completion = { completeopt = 'menu,menuone,noinsert' },
+
+      -- nvim-cmp is disabled in `prompt` buffers by default, which is exactly
+      -- what the dap REPL is. Re-enable it there so cmp-dap can serve completions.
+      enabled = function()
+        return vim.api.nvim_get_option_value('buftype', { buf = 0 }) ~= 'prompt'
+          or require('cmp_dap').is_dap_buffer()
+      end,
 
       -- For an understanding of why these mappings were
       -- chosen, you will need to read `:help ins-completion`
@@ -113,5 +122,12 @@ return { -- Autocompletion
         { name = 'nvim_lsp_signature_help' },
       },
     }
+
+    -- Use the dap completion source inside the REPL and dap-ui input buffers.
+    cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {
+      sources = {
+        { name = 'dap' },
+      },
+    })
   end,
 }
