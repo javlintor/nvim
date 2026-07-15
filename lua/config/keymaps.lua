@@ -38,20 +38,19 @@ end, { desc = 'Yanked absolute file path' })
 -- copy relative file path (from workspace root)
 vim.keymap.set('n', '<leader>cP', function()
   local filepath = vim.fn.expand '%:.' -- %:. gets the path relative to cwd
-  vim.fn.setreg('+', filepath)         -- copy to system clipboard
+  vim.fn.setreg('+', filepath)
   vim.notify('Relative path copied: ' .. filepath)
 end, { desc = 'Yanked relative (to cwd) file path' })
 
-
 vim.keymap.set('n', '<leader>cp', function()
   local filename = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
-  vim.fn.setreg('+', filename)           -- copy to system clipboard
+  vim.fn.setreg('+', filename)
   vim.notify('File name copied: ' .. filename)
 end, { desc = 'Yanked file name' })
 
 vim.keymap.set('n', '<leader>cC', function()
-  local filepath = vim.fn.expand '%:.'   -- %:. gets the path relative to cwd
+  local filepath = vim.fn.expand '%:.'
   local filepath_reference = "@" .. filepath
-  vim.fn.setreg('+', filepath_reference) -- copy to system clipboard
+  vim.fn.setreg('+', filepath_reference)
   vim.notify('Line reference copied: ' .. filepath_reference)
 end, { desc = 'Yanked file reference (for AI agents)' })
