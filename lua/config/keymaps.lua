@@ -16,7 +16,8 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 vim.keymap.set('n', 'G', 'Gzz', { noremap = true, silent = true })
 -- source Session.vim
-vim.keymap.set('n', '<leader>SS', '<cmd>source Session.vim<CR>', { noremap = true, silent = true, desc = '[S]ource [S]ession' })
+vim.keymap.set('n', '<leader>SS', '<cmd>source Session.vim<CR>',
+  { noremap = true, silent = true, desc = '[S]ource [S]ession' })
 -- smart delete buffer
 vim.keymap.set('n', '<Space>bd', function()
   vim.api.nvim_command 'bp|sp|bn|bd'
@@ -25,7 +26,23 @@ end)
 vim.keymap.set('n', '<leader>df', function()
   vim.diagnostic.open_float()
 end, { noremap = true, silent = true })
--- edit ghostty configuration file
-vim.keymap.set('n', '<leader>eg', function()
-  vim.cmd('edit ' .. '/Users/jlinares/.config/ghostty/config')
-end, { desc = '[E]edit [I]nit.lua' })
+-- copy absolute file path
+vim.keymap.set('n', '<leader>cA', function()
+  local filepath = vim.fn.expand '%:p' -- full file path
+  vim.fn.setreg('+', filepath)         -- copy to system clipboard
+  vim.notify('File path copied: ' .. filepath)
+end, { desc = 'Yanked absolute file path' })
+
+-- copy relative file path (from workspace root)
+vim.keymap.set('n', '<leader>cP', function()
+  local filepath = vim.fn.expand '%:.' -- %:. gets the path relative to cwd
+  vim.fn.setreg('+', filepath)         -- copy to system clipboard
+  vim.notify('Relative path copied: ' .. filepath)
+end, { desc = 'Yanked relative (to cwd) file path' })
+
+-- copy file name
+vim.keymap.set('n', '<leader>cp', function()
+  local filepath = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
+  vim.fn.setreg('+', filepath)           -- copy to system clipboard
+  vim.notify('File name copied: ' .. filepath)
+end, { desc = 'Yanked file name' })
