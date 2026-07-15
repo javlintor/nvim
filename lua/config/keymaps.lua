@@ -22,10 +22,12 @@ vim.keymap.set('n', '<leader>SS', '<cmd>source Session.vim<CR>',
 vim.keymap.set('n', '<Space>bd', function()
   vim.api.nvim_command 'bp|sp|bn|bd'
 end)
+
 -- open diagnostics float
 vim.keymap.set('n', '<leader>df', function()
   vim.diagnostic.open_float()
 end, { noremap = true, silent = true })
+
 -- copy absolute file path
 vim.keymap.set('n', '<leader>cA', function()
   local filepath = vim.fn.expand '%:p' -- full file path
@@ -40,9 +42,16 @@ vim.keymap.set('n', '<leader>cP', function()
   vim.notify('Relative path copied: ' .. filepath)
 end, { desc = 'Yanked relative (to cwd) file path' })
 
--- copy file name
+
 vim.keymap.set('n', '<leader>cp', function()
-  local filepath = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
-  vim.fn.setreg('+', filepath)           -- copy to system clipboard
-  vim.notify('File name copied: ' .. filepath)
+  local filename = vim.fn.expand '%:t:r' -- %:t:r gets the filename without path and extension
+  vim.fn.setreg('+', filename)           -- copy to system clipboard
+  vim.notify('File name copied: ' .. filename)
 end, { desc = 'Yanked file name' })
+
+vim.keymap.set('n', '<leader>cC', function()
+  local filepath = vim.fn.expand '%:.'   -- %:. gets the path relative to cwd
+  local filepath_reference = "@" .. filepath
+  vim.fn.setreg('+', filepath_reference) -- copy to system clipboard
+  vim.notify('Line reference copied: ' .. filepath_reference)
+end, { desc = 'Yanked file reference (for AI agents)' })
