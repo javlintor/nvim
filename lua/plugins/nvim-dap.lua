@@ -46,59 +46,11 @@ return {
       },
     }
 
-    local apps = { 'ops_washing', 'retail_forecaster', 'pool_totalizer' }
-
-    -- adapters
-    for _, app in ipairs(apps) do
-      dap.adapters[app] = {
-        type = 'executable',
-        command = 'uv',
-        args = {
-          'run',
-          '--group',
-          app,
-          '--env-file',
-          string.format('.env-files/%s.env', app),
-          'python',
-          '-m',
-          'debugpy.adapter',
-        },
-      }
-
-      -- configurations
-      dap.configurations.python = dap.configurations.python or {}
-      table.insert(dap.configurations.python, {
-        type = app,
-        request = 'launch',
-        name = 'Streamlit ' .. app,
-        module = 'streamlit',
-        args = {
-          'run',
-          'src/apps/main.py',
-          '--server.port',
-          '8080',
-          '--',
-          '--app',
-          app,
-        },
-      })
-    end
-
     dap.adapters.python = {
       type = 'executable',
-      command = 'uv', -- use uv to run python
+      command = 'uv',
       args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
     }
-    table.insert(dap.configurations.python, {
-      type = 'python',
-      request = 'launch',
-      name = 'Debug streamlit Current Shift Overview dummy app (.env file required)',
-      module = 'streamlit',
-      args = {
-        'run',
-        '_current_shift_overview_preview.py',
-      },
-    })
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
