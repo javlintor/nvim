@@ -71,7 +71,6 @@ return {
       module = 'pytest',
       args = function()
         local path = vim.fn.expand '%'
-        local line = vim.fn.line '.'
         return { path .. '::' .. vim.fn.expand '<cword>' }
       end,
     })
