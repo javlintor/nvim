@@ -51,6 +51,7 @@ return {
       command = 'uv',
       args = { 'run', '--env-file', '.env', 'python', '-m', 'debugpy.adapter' },
     }
+    dap.configurations.python = dap.configurations.python or {}
     table.insert(dap.configurations.python, {
       type = 'python',
       request = 'launch',
