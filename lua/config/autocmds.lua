@@ -60,3 +60,12 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.tabstop = n_char
   end,
 })
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    local file = vim.fn.getcwd() .. '/.nvim.lua'
+    if vim.uv.fs_stat(file) then
+      vim.cmd.source(file)
+    end
+  end,
+})
