@@ -54,3 +54,17 @@ vim.keymap.set('n', '<leader>cC', function()
   vim.fn.setreg('+', filepath_reference)
   vim.notify('Line reference copied: ' .. filepath_reference)
 end, { desc = 'Yanked file reference (for AI agents)' })
+
+-- copy file reference with selected line range (for AI agents)
+vim.keymap.set('x', 'Y', function()
+  local start_line = vim.fn.line 'v'
+  local end_line = vim.fn.line '.'
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+  local range = start_line == end_line and ('#L' .. start_line) or ('#L' .. start_line .. '-' .. end_line)
+  local reference = '@' .. vim.fn.expand '%:.' .. range
+  vim.fn.setreg('+', reference)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
+  vim.notify('Line reference copied: ' .. reference)
+end, { desc = 'Yanked file reference with line range (for AI agents)' })
