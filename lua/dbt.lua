@@ -19,8 +19,10 @@ local function list_downstream_models()
       "force",
       {
         prompt_title = bf_model .. "+1",
+        -- ref('bf_model') o la tupla ('alias', 'bf_model') de simple_cte (una línea por tupla: Telescope necesita columna)
         search = string.format(
-          [[\{\{\s*ref\(\s*['"]%s['"]\s*\)\s*\}\}]],
+          [==[\{\{\s*ref\(\s*['"]%s['"]\s*\)\s*\}\}|\(\s*['"][^'"]+['"]\s*,\s*['"]%s['"]\s*\)]==],
+          bf_model,
           bf_model
         ),
         use_regex = true,
@@ -128,8 +130,10 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.api.nvim_buf_create_user_command(bufnr, "DBTUpstreamModels", list_upstream_models, {})
     vim.api.nvim_buf_create_user_command(bufnr, "DBTCompiledModel", compiled_model, {})
     vim.api.nvim_buf_create_user_command(bufnr, "DBTDownstreamModels", list_downstream_models, {})
-    vim.api.nvim_buf_create_user_command(bufnr, "DBTEditModelDocs", function() _model_documentation("edit") end, {})
-    vim.api.nvim_buf_create_user_command(bufnr, "DBTVsplitModelDocs", function() _model_documentation("vsplit") end, {})
+    vim.api.nvim_buf_create_user_command(bufnr, "DBTEditModelDocs",
+      function() _model_documentation("edit") end, {})
+    vim.api.nvim_buf_create_user_command(bufnr, "DBTVsplitModelDocs",
+      function() _model_documentation("vsplit") end, {})
 
     -- Buffer-local keymaps
     vim.keymap.set("n", "<leader>su", list_upstream_models, {
