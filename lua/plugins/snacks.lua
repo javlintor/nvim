@@ -2,29 +2,29 @@ return {
   "folke/snacks.nvim",
   opts = {
     -- bigfile = { enabled = true },
-dashboard = {
-    enabled = true,
+    dashboard = {
+      enabled = true,
 
-    preset = {
-  header = [[
-     ██╗ █████╗ ██╗   ██╗██╗     ██╗███╗   ██╗████████╗ ██████╗ ██████╗ 
-     ██║██╔══██╗██║   ██║██║     ██║████╗  ██║╚══██╔══╝██╔═══██╗██╔══██╗
-     ██║███████║██║   ██║██║     ██║██╔██╗ ██║   ██║   ██║   ██║██████╔╝
-██   ██║██╔══██║╚██╗ ██╔╝██║     ██║██║╚██╗██║   ██║   ██║   ██║██╔══██╗
-╚█████╔╝██║  ██║ ╚████╔╝ ███████╗██║██║ ╚████║   ██║   ╚██████╔╝██║  ██║
- ╚════╝ ╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+      preset = {
+        header = [[
+     ██╗ █████╗ ██╗   ██╗██╗     ██╗███╗   ██╗████████╗ ██████╗ ██████╗
+       ██║██╔══██╗██║   ██║██║     ██║████╗  ██║╚══██╔══╝██╔═══██╗██╔══██╗
+       ██║███████║██║   ██║██║     ██║██╔██╗ ██║   ██║   ██║   ██║██████╔╝
+  ██   ██║██╔══██║╚██╗ ██╔╝██║     ██║██║╚██╗██║   ██║   ██║   ██║██╔══██╗
+  ╚█████╔╝██║  ██║ ╚████╔╝ ███████╗██║██║ ╚████║   ██║   ╚██████╔╝██║  ██║
+   ╚════╝ ╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
   ]],
 
-      keys = {
-        { icon = " ", key = "f", desc = "Find File", action = ":Telescope find_files" },
-        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-        { icon = " ", key = "g", desc = "Grep", action = ":Telescope live_grep" },
-        { icon = " ", key = "r", desc = "Recent Files", action = ":Telescope oldfiles" },
-        { icon = " ", key = "c", desc = "Config", action = ":e $MYVIMRC" },
-        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+        keys = {
+          { icon = " ", key = "f", desc = "Find File", action = ":Telescope find_files" },
+          { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+          { icon = " ", key = "g", desc = "Grep", action = ":Telescope live_grep" },
+          { icon = " ", key = "r", desc = "Recent Files", action = ":Telescope oldfiles" },
+          { icon = " ", key = "c", desc = "Config", action = ":e $MYVIMRC" },
+          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+        },
       },
     },
-  },
     -- explorer = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
@@ -36,10 +36,4 @@ dashboard = {
     statuscolumn = { enabled = true },
     words = { enabled = true },
   },
-  init = function()
-    Snacks = require("snacks")
-    vim.api.nvim_create_user_command("Term", function()
-      Snacks.terminal.toggle()
-    end, {})
-  end,
 }
